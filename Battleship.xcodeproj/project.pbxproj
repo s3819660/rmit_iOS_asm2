@@ -24,6 +24,7 @@
 		89490AB628B0F63C008F5F1C /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490AB528B0F63C008F5F1C /* MenuView.swift */; };
 		89490AB828B0F643008F5F1C /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490AB728B0F643008F5F1C /* GameView.swift */; };
 		89490ABA28B0F64D008F5F1C /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490AB928B0F64D008F5F1C /* LeaderboardView.swift */; };
+		89490ABC28B0FC35008F5F1C /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		89490AB528B0F63C008F5F1C /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		89490AB728B0F643008F5F1C /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		89490AB928B0F64D008F5F1C /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				89490AB528B0F63C008F5F1C /* MenuView.swift */,
 				89490AB728B0F643008F5F1C /* GameView.swift */,
 				89490AB928B0F64D008F5F1C /* LeaderboardView.swift */,
+				89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89490ABC28B0FC35008F5F1C /* HowToPlayView.swift in Sources */,
 				89490AAA28B0F5FB008F5F1C /* Ocean.swift in Sources */,
 				89490AAE28B0F60C008F5F1C /* Game.swift in Sources */,
 				89490A9428B0F5A3008F5F1C /* ContentView.swift in Sources */,

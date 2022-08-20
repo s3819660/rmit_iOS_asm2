@@ -21,10 +21,13 @@ struct MenuView: View {
                 
                 VStack {
                     NavigationLink(destination: GameView()) {
-                        Text("Play Now")
+                        Text("Play now")
                     }
                     NavigationLink(destination: LeaderboardView()) {
                         Text("Leaderboard")
+                    }
+                    NavigationLink(destination: HowToPlayView()) {
+                        Text("How to play")
                     }
                 }
                 .navigationBarTitle("", displayMode: .inline)
