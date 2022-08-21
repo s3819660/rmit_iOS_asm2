@@ -52,13 +52,26 @@ struct OceanView: View {
         let jsonStr = arrToJson(arr: arr)!
         
         // Save to Firestore
-        db.collection("users").document("nhu").updateData([
+//        db.collection("users").document("nhu").updateData([
+//            "state": jsonStr
+//        ]) {err in
+//            if let err = err {
+//                print("Error updating document: \(err)")
+//            } else {
+//                print("Successfully updated state to Firestore!")
+//            }
+//        }
+        db.collection("users").document("nhu").setData([
+            "pwd": "1234",
             "state": jsonStr
-        ]) {err in
+        ]) { err in
             if let err = err {
-                print("Error updating document: \(err)")
+                print("Error writing document: \(err)")
             } else {
-                print("Successfully updated state to Firestore!")
+                print("Document successfully written!")
+                
+                // Update prev state
+                game.prevZoneStates = game.zoneStates
             }
         }
     }

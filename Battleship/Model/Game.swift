@@ -43,6 +43,9 @@ final class Game: ObservableObject {
     // Difficulty level 0, 1, 2
     var difficultyLevel = 1
     
+    // Previous zone states
+    var prevZoneStates = [[OceanZoneState]]()
+    
     /*
      Init game
      */
@@ -51,6 +54,9 @@ final class Game: ObservableObject {
         self.fleet = Fleet()
         self.fleet2 = Fleet(isBot: false)
         reset() // refactor: reset when open Game view instead of when init Game object
+        
+        // load prev zone states
+        fetchStateFromFirestore()
     }
     
     /*
@@ -78,7 +84,6 @@ final class Game: ObservableObject {
      Fetch game state from Firestore
      */
     func fetchStateFromFirestore() {
-        print("fetchStateFromFirestore")
         let docRef = db.collection("users").document("nhu")
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
@@ -86,19 +91,18 @@ final class Game: ObservableObject {
                     print("Cannot parse Game state from document")
                     return
                 }
-                
 //                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
 //                print("Document data: \(dataDescription)")
                 
-
                 // Get zone state arr
-                let prevState = self.jsonToArr(jsonStr: state)
-//                print("Document State data:", prevState)
+                let arr = self.jsonToArr(jsonStr: state)
                 
                 // Load previous zone states
-//                self.loadPreviousZoneStates(stateArr: prevState)
-                self.zoneStates = self.loadPreviousZoneStates(stateArr: prevState)
+//                self.zoneStates = self.parseZoneStates(stateArr: prevState)
+                self.prevZoneStates = self.parseZoneStates(stateArr: arr)
+                self.zoneStates = self.prevZoneStates
             } else {
+                self.prevZoneStates = [[OceanZoneState]]()
                 print("Document does not exist")
             }
         }
@@ -327,9 +331,10 @@ final class Game: ObservableObject {
         return states
     }
     
-    private func loadPreviousZoneStates(stateArr: [[Int]]) -> [[OceanZoneState]] {
-        print("loadPreviousZoneStates")
-        
+    /*
+     parse 2D array of Int to Zone States
+     */
+    private func parseZoneStates(stateArr: [[Int]]) -> [[OceanZoneState]] {     
         var states = [[OceanZoneState]]()
         for (i, x) in stateArr.enumerated() {
             states.append([])

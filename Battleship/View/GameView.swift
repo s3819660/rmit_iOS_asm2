@@ -31,6 +31,9 @@ struct GameView: View {
         if !isNewGame {
             // fetch game state from Firestore
             game.fetchStateFromFirestore()
+        } else {
+            // if not reset to new game
+            game.reset()
         }
     }
 }
