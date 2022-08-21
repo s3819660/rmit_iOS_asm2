@@ -13,11 +13,11 @@
 
 import Foundation
 
-enum OceanZoneState {
-    case clear
-    case miss
-    case hit
-    case myCompartment
-    case opponentHit
-    case opponentMiss
+enum OceanZoneState: Int {
+    case clear = 0
+    case miss = 1
+    case hit = 2
+    case myCompartment = 3
+    case opponentHit = 4
+    case opponentMiss = 5
 }

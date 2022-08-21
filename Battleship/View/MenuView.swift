@@ -20,6 +20,9 @@ struct MenuView: View {
                 Color("BackgroundColor")
                 
                 VStack {
+                    NavigationLink(destination: GameView(isNewGame: false)) {
+                        Text("Resume")
+                    }
                     NavigationLink(destination: GameView()) {
                         Text("Play now")
                     }
@@ -30,11 +33,13 @@ struct MenuView: View {
                         Text("How to play")
                     }
                 }
-                .navigationBarTitle("", displayMode: .inline)
-                .navigationBarHidden(true)
+                    .navigationBarTitle("", displayMode: .inline)
+                    .navigationBarHidden(true)
             }
-            .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.all)
         }
+            // fix NSLayoutContraints warnings
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -14,18 +14,30 @@
 import SwiftUI
 
 struct GameView: View {
+    @EnvironmentObject var game: Game
+    var isNewGame = true
+    
     var body: some View {
         VStack {
             ToolbarView()
             OceanView()
         }
+        .onAppear(perform: handleResumeGame)
         // Hide navigation bar
         .navigationBarHidden(true)
+    }
+    
+    func handleResumeGame() {
+        if !isNewGame {
+            // fetch game state from Firestore
+            game.fetchStateFromFirestore()
+        }
     }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()
+            .environmentObject(Game())
     }
 }

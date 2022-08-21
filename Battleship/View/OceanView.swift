@@ -12,6 +12,8 @@
 */
 
 import SwiftUI
+import FirebaseCore
+import FirebaseFirestore
 
 /*
  An OceanView consists of a grid of OceanZoneViews
@@ -32,13 +34,58 @@ struct OceanView: View {
                         .frame(height: geo.size.height/CGFloat(Game.numRows))
                         .onTapGesture {
                             // if my turn
-                            if (game.isMyTurn) {                                game.zoneTapped(location)
+                            if (game.isMyTurn) {
+                                game.zoneTapped(location)
                             }
                         }
-                    
+
                 }
             }
         }
+        .onDisappear(perform: saveStateToFirestore)
+    }
+    
+    func saveStateToFirestore() {
+        let arr = getCurrentZoneStates(zoneStates: game.zoneStates)
+        
+        // Consert array to json string
+        let jsonStr = arrToJson(arr: arr)!
+        
+        // Save to Firestore
+        db.collection("users").document("nhu").updateData([
+            "state": jsonStr
+        ]) {err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Successfully updated state to Firestore!")
+            }
+        }
+    }
+    
+    func arrToJson(arr: [[Int]]) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: arr, options:  []) else {
+            return nil
+        }
+        return String(data: data, encoding: String.Encoding.utf8)
+    }
+    
+    func getOceanZoneStateRawValue(zoneState: OceanZoneState) -> Int {
+        return zoneState.rawValue
+    }
+    
+    func getCurrentZoneStates(zoneStates: [[OceanZoneState]]) -> [[Int]] {
+        var arr = [[Int]]()
+        
+        // Init game state 2D array of Int
+        for (i, x) in zoneStates.enumerated() {
+            arr.append([])
+            for y in x {
+                arr[i].append(getOceanZoneStateRawValue(zoneState: y))
+            }
+        }
+        
+        return arr
     }
 }
 
