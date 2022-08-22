@@ -16,7 +16,7 @@ import Foundation
 /*
  represents a compartment within a ship which has a location and can also be flooded
  */
-class ShipCompartment {
+class ShipCompartment: Codable {
     var location: Coordinate = .zero
     var flooded: Bool = false
     

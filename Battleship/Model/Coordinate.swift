@@ -16,7 +16,7 @@ import Foundation
 /*
  a simple x,y coordinate
  */
-struct Coordinate: Hashable {
+struct Coordinate: Hashable, Codable {
     var x: Int = 0
     var y: Int = 0
     static var zero = Coordinate(x: 0, y: 0)

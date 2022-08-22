@@ -38,7 +38,12 @@ final class Game: ObservableObject {
     var botWin: Bool {return fleet2.isDestroyed()} // game is over when player wins or bot wins
     
     // Bot's last hits
-    var botLastHitShip = [Coordinate]()
+    var botLastHits = [Coordinate]()
+    var botLastHitShips:[(name: String, length: Int)] = [("PT Boat", 2),
+                                                         ("Submarine", 3),
+                                                         ("Destroyer", 3),
+                                                         ("Battleship", 2),
+                                                         ("Aircraft Carrier", 2)]
     
     // Difficulty level 0, 1, 2
     var difficultyLevel = 1
@@ -101,11 +106,39 @@ final class Game: ObservableObject {
 //                self.zoneStates = self.parseZoneStates(stateArr: prevState)
                 self.prevZoneStates = self.parseZoneStates(stateArr: arr)
                 self.zoneStates = self.prevZoneStates
+                
+                // TODO: Load my fleet from Firebase
+//                self.fleet2
             } else {
                 self.prevZoneStates = [[OceanZoneState]]()
                 print("Document does not exist")
             }
         }
+        
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                guard let fleet = document.get("fleet") as? String else {
+                    print("line 121 Cannot parse Game state from document")
+                    return
+                }
+
+//                let ship = document.get("Submarine")
+                // TODO: Load my fleet from Firebase
+//                self.fleet2
+                print(self.jsonToFleet(jsonStr: fleet))
+                self.fleet2 = self.jsonToFleet(jsonStr: fleet)
+            } else {
+                self.prevZoneStates = [[OceanZoneState]]()
+                print("Document does not exist")
+            }
+        }
+    }
+    
+    func jsonToFleet(jsonStr: String) -> Fleet {
+        let jsonData = Data(jsonStr.utf8)
+        let parsedData = try! JSONDecoder().decode(Fleet.self, from: jsonData)
+        print("line 139 parsedData", parsedData.ships)
+        return parsedData
     }
     
     func jsonToArr(jsonStr: String) -> [[Int]] {
@@ -166,14 +199,21 @@ final class Game: ObservableObject {
             if let hitShip = self.fleet2.ship(at: location) {
                 hitShip.hit(at: location)
                 self.zoneStates[location.x][location.y] = .opponentHit
+//                print("line 174 self.zoneStates[location.x][location.y]", self.zoneStates[location.x][location.y])
                 self.message = hitShip.isSunk() ? "Bot sunk your \(hitShip.name)!" : "Bot Hit"
                 
                 // TODO: Save to last hit location
                 // find all coordinates of ship and append to botLastHitShip
                 // after sunking a ship, clear botLastHitShip
-                self.botLastHitShip.append(location)
-                print(self.botLastHitShip)
+                self.botLastHits.append(location)
+//                print("self.botLastHits=", self.botLastHits)
                 
+                // Get index of hitShip in botLastHitShips
+                guard let hitShipIndex = self.botLastHitShips.firstIndex(where: {$0.name == hitShip.name}) else {
+                    return
+                }
+                // Update botLastHitShips
+                self.botLastHitShips[hitShipIndex].length -= 1
             } else {
                 self.zoneStates[location.x][location.y] = .opponentMiss
                 self.message = "Bot Miss"
@@ -207,7 +247,7 @@ final class Game: ObservableObject {
                     location.y = j
                     if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
 //                    if (y == .myCompartment) { //bot always wins
-                        print([i, j])
+//                        print([i, j])
                         location.x = i
                         location.y = j
                         found = true
@@ -255,11 +295,11 @@ final class Game: ObservableObject {
         var location = Coordinate(x: 0, y: 0)
         // if bot just hit
         // search for adjacent locations
-        if !botLastHitShip.isEmpty {
+        if !botLastHits.isEmpty {
             // get adjacent move to search for ship location
-            let lastHitLocation = botLastHitShip[botLastHitShip.endIndex - 1]
+            let lastHitLocation = botLastHits[botLastHits.endIndex - 1]
             location = getAdjacentLocation(lastHitLocation: lastHitLocation)
-            print("adjacentLocation=", location)
+//            print("adjacentLocation=", location)
         } else {
             // get random (i + j) % 2 == 0 location
             var found = false
@@ -270,8 +310,8 @@ final class Game: ObservableObject {
                     location.x = i
                     location.y = j
 
-                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
-    //                if (y == .myCompartment) { //bot always wins
+//                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
+                    if (y == .myCompartment) { //bot always wins
                         location.x = i
                         location.y = j
                         found = true
