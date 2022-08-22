@@ -14,14 +14,26 @@
 import SwiftUI
 
 struct MenuView: View {
+    @EnvironmentObject var game: Game
+    @State var isResumeHidden = true // should be true for new user
+    
     var body: some View {
         NavigationView {
             ZStack {
                 Color("BackgroundColor")
                 
                 VStack {
+                    NavigationLink(destination: GameView(isNewGame: false)) {
+                        Text("Resume")
+                    }
+                        // hide Resume button if it is a new user
+                        .opacity((game.prevZoneStates.isEmpty && isResumeHidden) ? 0 : 1)
+                        .onDisappear {
+                            // (Workaround) unhide Resume button for when new user creates a new game then go back to menu
+                            self.isResumeHidden = false
+                        }
                     NavigationLink(destination: GameView()) {
-                        Text("Play now")
+                        Text("New game")
                     }
                     NavigationLink(destination: LeaderboardView()) {
                         Text("Leaderboard")
@@ -30,11 +42,13 @@ struct MenuView: View {
                         Text("How to play")
                     }
                 }
-                .navigationBarTitle("", displayMode: .inline)
-                .navigationBarHidden(true)
+                    .navigationBarTitle("", displayMode: .inline)
+                    .navigationBarHidden(true)
             }
-            .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.all)
         }
+            // fix NSLayoutContraints warnings
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

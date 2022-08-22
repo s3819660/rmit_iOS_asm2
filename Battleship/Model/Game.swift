@@ -13,6 +13,8 @@
 
 import Foundation
 import Combine
+import FirebaseCore
+import FirebaseFirestore
 
 /*
  The classic Battleship game
@@ -23,23 +25,38 @@ final class Game: ObservableObject {
 //    static let numCols = 6
 //    static let numRows = 6
     var ocean: Ocean
-    var fleet: Fleet
-    var fleet2: Fleet
+    var fleet: Fleet // Bot's fleet
+    var fleet2: Fleet // My fleet
+    
+    // Game state
     @Published var zoneStates = [[OceanZoneState]]()
     @Published var message = ""
     @Published var isMyTurn = true
+    
+    // Is game over
     var over: Bool {return fleet.isDestroyed()}
     var botWin: Bool {return fleet2.isDestroyed()} // game is over when player wins or bot wins
-    var difficultyLevel = 1
+    
+    // Bot's last hits
     var botLastHitShip = [Coordinate]()
     
-//    fleet: bot's fleet
-//    fleet2: player's fleet
+    // Difficulty level 0, 1, 2
+    var difficultyLevel = 1
+    
+    // Previous zone states
+    var prevZoneStates = [[OceanZoneState]]()
+    
+    /*
+     Init game
+     */
     init() {
         self.ocean = Ocean(numCols: Game.numCols, numRows: Game.numRows)
         self.fleet = Fleet()
         self.fleet2 = Fleet(isBot: false)
-        reset()
+        reset() // refactor: reset when open Game view instead of when init Game object
+        
+        // load prev zone states
+        fetchStateFromFirestore()
     }
     
     /*
@@ -61,6 +78,41 @@ final class Game: ObservableObject {
         for e in self.fleet2.coordinates() {
             zoneStates[e.x][e.y] = .myCompartment
         }
+    }
+    
+    /*
+     Fetch game state from Firestore
+     */
+    func fetchStateFromFirestore() {
+        let docRef = db.collection("users").document("nhu")
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                guard let state = document.get("state") as? String else {
+                    print("Cannot parse Game state from document")
+                    return
+                }
+//                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//                print("Document data: \(dataDescription)")
+                
+                // Get zone state arr
+                let arr = self.jsonToArr(jsonStr: state)
+                
+                // Load previous zone states
+//                self.zoneStates = self.parseZoneStates(stateArr: prevState)
+                self.prevZoneStates = self.parseZoneStates(stateArr: arr)
+                self.zoneStates = self.prevZoneStates
+            } else {
+                self.prevZoneStates = [[OceanZoneState]]()
+                print("Document does not exist")
+            }
+        }
+    }
+    
+    func jsonToArr(jsonStr: String) -> [[Int]] {
+        let jsonData = Data(jsonStr.utf8)
+        let parsedData = try! JSONDecoder().decode([[Int]].self, from: jsonData)
+        
+        return parsedData
     }
     
     /*
@@ -275,6 +327,23 @@ final class Game: ObservableObject {
                 states[x].append(.clear)
             }
         }
+        
+        return states
+    }
+    
+    /*
+     parse 2D array of Int to Zone States
+     */
+    private func parseZoneStates(stateArr: [[Int]]) -> [[OceanZoneState]] {     
+        var states = [[OceanZoneState]]()
+        for (i, x) in stateArr.enumerated() {
+            states.append([])
+            for y in x {
+                states[i].append(OceanZoneState(rawValue: y)!)
+            }
+        }
+        
+//        print(states)
         return states
     }
 }

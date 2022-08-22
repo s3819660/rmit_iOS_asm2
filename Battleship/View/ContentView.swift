@@ -16,7 +16,7 @@ import SwiftUI
 // https://github.com/klynch71/Battleship-SwiftUI
 struct ContentView: View {
     var body: some View {
-            MenuView()
+        MenuView()
     }
 }
 
