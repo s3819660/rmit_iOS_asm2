@@ -50,6 +50,7 @@ final class Game: ObservableObject {
                                                           ("Battleship", [Coordinate]()),
                                                           ("Aircraft Carrier", [Coordinate]())]
     var botLastHitShipName = ""
+    var botMoveCombinations = [[Coordinate]]()
     
     // Difficulty level 0, 1, 2
     var difficultyLevel = 1
@@ -92,6 +93,7 @@ final class Game: ObservableObject {
         
         // Reset Bot's last hit ships
         self.resetBotLastHitShips()
+        self.botMoveCombinations.removeAll()
     }
     
     /*
@@ -222,8 +224,15 @@ final class Game: ObservableObject {
                 // Update botLastHitShips
                 self.botLastHitShips[hitShipIndex].length -= 1
                 self.updateBotLastHitShips(shipName: hitShip.name, location: location)
-                self.getCombinations(location: location, numOfCompartments: self.getNumOfCompartments(shipName: hitShip.name))
-//                print("line 224, botLastHitShips2=", self.botLastHitShips2)
+
+                if hitShip.isSunk() {
+                    self.botMoveCombinations.removeAll()
+                } else {
+                    if self.botMoveCombinations.isEmpty {
+                        self.botMoveCombinations = self.getCombinations(location: location, numOfCompartments: self.getNumOfCompartments(shipName: hitShip.name))
+                    }
+                }
+//                print("line 227, botMoveCombinations=", self.botMoveCombinations)
                 
                 
                 
@@ -273,7 +282,11 @@ final class Game: ObservableObject {
             }
         } else if difficultyLevel == 1 { // Bot knows where 30% of my ships are (2 ships)
             
-            location = getBotNextMove()
+//            location = getBotNextMove()
+            location = getBotNextMoveCombination()
+            while (!isBotValidMove(x: location.x, y: location.y)) {
+                location = getBotNextMoveCombination()
+            }
 //            var found = false
 //            for (i, x) in self.zoneStates.enumerated() {
 //                for (j, y) in x.enumerated() {
@@ -302,17 +315,19 @@ final class Game: ObservableObject {
         return location
     }
     
-    // Get bot next move (searching)
+    /*
+     TODO: delete combination when 1 move doesn't work (optional)
+     */
+    /*
+     TODO: Bot has flaws: 2 hits in a row with the second hit belonging to another ship will calculate wrong next combinations
+     => use botLastHitShips2 to fix
+     */
+    // Get bot next move (skipping)
     func getBotNextMove() -> Coordinate {
         var location = Coordinate(x: 0, y: 0)
         // if bot just hit
         // search for adjacent locations
-        if !botLastHits.isEmpty {
-            // get adjacent move to search for ship location
-            let lastHitLocation = botLastHits[botLastHits.endIndex - 1]
-            location = getAdjacentLocation(lastHitLocation: lastHitLocation)
-//            print("adjacentLocation=", location)
-        } else {
+
             // get random (i + j) % 2 == 0 location
             var found = false
             for (i, x) in self.zoneStates.enumerated() {
@@ -322,8 +337,8 @@ final class Game: ObservableObject {
                     location.x = i
                     location.y = j
 
-//                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
-                    if (y == .myCompartment) { //bot always wins
+                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
+//                    if (y == .myCompartment) { //bot always wins
                         location.x = i
                         location.y = j
                         found = true
@@ -335,9 +350,29 @@ final class Game: ObservableObject {
                     break
                 }
             }
-        }
+        
         
         return location
+    }
+    
+    // Get bot next move (based on combinations)
+    func getBotNextMoveCombination() -> Coordinate {
+        if !botMoveCombinations.isEmpty {
+            let lastCombIndex = botMoveCombinations.count - 1
+            let lastCombination = botMoveCombinations[lastCombIndex]
+            let lastPosIndex = lastCombination.count - 1
+            let lastPos = lastCombination[lastPosIndex]
+            botMoveCombinations[lastCombIndex].removeLast()
+            if botMoveCombinations[lastCombIndex].isEmpty {
+                botMoveCombinations.removeLast()
+            }
+//            print("line 362, botMoveCombinations \(botMoveCombinations)")
+//            print("line 363, getBotNextMoveCombination() \(lastPos)")
+            return lastPos
+        }
+        let lastPos = getBotNextMove()
+//        print("line 360, getBotNextMoveCombination() \(lastPos)")
+        return lastPos
     }
     
     // get adjacent move from last hit location
@@ -403,80 +438,32 @@ final class Game: ObservableObject {
     }
     
     /*
-     Get combinations
+     Get combinations (needs optimizing)
      */
-    func getCombinations(location: Coordinate, numOfCompartments: Int) {
-        if (location == Coordinate(x: 0, y: 0) ||
-            location == Coordinate(x: 0, y: (ocean.numRows - 1)) ||
-            location == Coordinate(x: (ocean.numCols - 1), y: 0) ||
-            location == Coordinate(x: (ocean.numCols - 1), y: (ocean.numRows - 1))) {
-            print("case 1", getCornerCombinations(location: location, numOfCompartments: numOfCompartments))
-        } else if (location.x == 0 || location.y == 0) {
-            print("case 2", getCornerCombinations(location: location, numOfCompartments: numOfCompartments))
-        } else  {
-            print("case 3", getCornerCombinations(location: location, numOfCompartments: numOfCompartments))
-        }
-    }
-    
-    /*
-     Get corner combinations (needs optimizing)
-     */
-    func getCornerCombinations(location: Coordinate, numOfCompartments: Int) -> [[Coordinate]] {
-        var comb = [[Coordinate]]()
-        let lastX = location.x
-        let lastY = location.y
-        
-        if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-            comb.append([location, Coordinate(x: lastX + 1, y: lastY)])
-        } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-            comb.append([location, Coordinate(x: lastX - 1, y: lastY)])
-        }
-        
-        if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-            comb.append([location, Coordinate(x: lastX, y: lastY + 1)])
-        } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-            comb.append([location, Coordinate(x: lastX, y: lastY - 1)])
-        }
-        
-        if numOfCompartments == 3 {
-            if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-                comb.append([location, Coordinate(x: lastX + 1, y: lastY), Coordinate(x: lastX + 2, y: lastY)])
-            } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-                comb.append([location, Coordinate(x: lastX - 1, y: lastY), Coordinate(x: lastX - 2, y: lastY)])
-            }
-            
-            if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-                comb.append([location, Coordinate(x: lastX, y: lastY + 1), Coordinate(x: lastX, y: lastY + 2)])
-            } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-                comb.append([location, Coordinate(x: lastX, y: lastY - 1), Coordinate(x: lastX, y: lastY - 2)])
-            }
-            return comb
-        }
-        
-        return comb
-    }
-    
-    /*
-     Get side combinations (needs optimizing)
-     */
-    func getSideCombinations(location: Coordinate, numOfCompartments: Int) -> [[Coordinate]] {
+    func getCombinations(location: Coordinate, numOfCompartments: Int) -> [[Coordinate]] {
         var comb = [[Coordinate]]()
         let lastX = location.x
         let lastY = location.y
         
         if numOfCompartments == 3 {
             if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-                comb.append([location, Coordinate(x: lastX + 1, y: lastY), Coordinate(x: lastX + 2, y: lastY)])
-            } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-                comb.append([location, Coordinate(x: lastX - 1, y: lastY), Coordinate(x: lastX - 2, y: lastY)])
+                comb.append([Coordinate(x: lastX + 1, y: lastY), Coordinate(x: lastX + 2, y: lastY)])
+//                print("432")
+            }
+            if (lastX - 2 >= 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
+                comb.append([Coordinate(x: lastX - 1, y: lastY), Coordinate(x: lastX - 2, y: lastY)])
+//                print("436")
             }
             
             if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-                comb.append([location, Coordinate(x: lastX, y: lastY + 1), Coordinate(x: lastX, y: lastY + 2)])
-            } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-                comb.append([location, Coordinate(x: lastX, y: lastY - 1), Coordinate(x: lastX, y: lastY - 2)])
+                comb.append([Coordinate(x: lastX, y: lastY + 1), Coordinate(x: lastX, y: lastY + 2)])
+//                print("441")
             }
-            
+            if (lastY - 2 >= 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
+                comb.append([Coordinate(x: lastX, y: lastY - 1), Coordinate(x: lastX, y: lastY - 2)])
+//                print("445")
+            }
+
             // case in the middle
             /**
              1
@@ -484,37 +471,34 @@ final class Game: ObservableObject {
              1
              */
             if (lastX + 1 < Game.numCols && lastX > 0 && isBotValidMove(x: lastX + 1, y: lastY)) {
-                comb.append([Coordinate(x: lastX - 1, y: lastY), location, Coordinate(x: lastX + 1, y: lastY)])
+                comb.append([Coordinate(x: lastX - 1, y: lastY), Coordinate(x: lastX + 1, y: lastY)])
+//                print("456")
             }
             
             if (lastY + 1 < Game.numRows && lastY > 0 && isBotValidMove(x: lastX, y: lastY + 1)) {
-                comb.append([Coordinate(x: lastX, y: lastY - 1), location, Coordinate(x: lastX, y: lastY + 1)])
+                comb.append([Coordinate(x: lastX, y: lastY - 1), Coordinate(x: lastX, y: lastY + 1)])
+//                print("461")
             }
             return comb
         }
-        
+
         if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-            comb.append([location, Coordinate(x: lastX + 1, y: lastY)])
-        } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-            comb.append([location, Coordinate(x: lastX - 1, y: lastY)])
+            comb.append([Coordinate(x: lastX + 1, y: lastY)])
+//            print("468")
+        }
+        if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
+            comb.append([Coordinate(x: lastX - 1, y: lastY)])
+//            print("471")
         }
         
         if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-            comb.append([location, Coordinate(x: lastX, y: lastY + 1)])
-        } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-            comb.append([location, Coordinate(x: lastX, y: lastY - 1)])
+            comb.append([Coordinate(x: lastX, y: lastY + 1)])
+//            print("476")
         }
-        
-        return comb
-    }
-    
-    /*
-     Get middle combinations (needs optimizing)
-     */
-    func getMiddleCombinations(location: Coordinate, numOfCompartments: Int) -> [[Coordinate]] {
-        var comb = [[Coordinate]]()
-        let lastX = location.x
-        let lastY = location.y
+        if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
+            comb.append([Coordinate(x: lastX, y: lastY - 1)])
+//            print("479")
+        }
         
         return comb
     }
