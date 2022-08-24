@@ -20,4 +20,5 @@ enum OceanZoneState: Int {
     case myCompartment = 3
     case opponentHit = 4
     case opponentMiss = 5
+    case obstacle = 6
 }

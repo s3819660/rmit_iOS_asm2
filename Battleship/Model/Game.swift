@@ -54,6 +54,8 @@ final class Game: ObservableObject {
     
     // Difficulty level 0, 1, 2
     var difficultyLevel = 1
+    var botScore = 0
+    var myScore = 0
     
     // Previous zone states
     var prevZoneStates = [[OceanZoneState]]()
@@ -78,6 +80,8 @@ final class Game: ObservableObject {
         self.zoneStates = defaultZoneStates()
         self.fleet.deploy(on: self.ocean)
         self.message = ""
+        self.myScore = 0
+        self.botScore = 0
         // reset isMyTurn
         isMyTurn = true
         
@@ -162,7 +166,7 @@ final class Game: ObservableObject {
      */
     func zoneTapped(_ location: Coordinate) {
         //if we already tapped this location or the game is over, just ignore it
-        if ((zoneStates[location.x][location.y] != .clear) || over || (zoneStates[location.x][location.y] == .myCompartment)) {
+        if ((zoneStates[location.x][location.y] != .clear || zoneStates[location.x][location.y] != .obstacle) || over || (zoneStates[location.x][location.y] == .myCompartment)) {
             print("invalid tap, tap again")
             return
         }
@@ -172,7 +176,13 @@ final class Game: ObservableObject {
             hitShip.hit(at: location)
             zoneStates[location.x][location.y] = .hit
             message = hitShip.isSunk() ? "You sunk their \(hitShip.name)!" : "You Hit"
+
+            // Calculate score
+            myScore += 5
         } else {
+            // Decrease my score
+            myScore -= (zoneStates[location.x][location.y] == .obstacle) ? 2 : 1
+
             zoneStates[location.x][location.y] = .miss
             message = "You Miss"
         }
@@ -211,7 +221,8 @@ final class Game: ObservableObject {
 //                print("line 174 self.zoneStates[location.x][location.y]", self.zoneStates[location.x][location.y])
                 self.message = hitShip.isSunk() ? "Bot sunk your \(hitShip.name)!" : "Bot Hit"
                 
-                
+                // Calculate score
+                botScore += 3
                 
                 // TODO: Save to last hit location
                 // find all coordinates of ship and append to botLastHitShip
@@ -237,6 +248,9 @@ final class Game: ObservableObject {
                 
                 
             } else {
+                // Decrease bot score
+                botScore -= (zoneStates[location.x][location.y] == .obstacle) ? 2 : 1
+
                 self.zoneStates[location.x][location.y] = .opponentMiss
                 self.message = "Bot Miss"
             }
@@ -250,6 +264,15 @@ final class Game: ObservableObject {
             // Toggle isMyTurn
             self.isMyTurn = true
         }
+    }
+
+    /**
+    wrong move -1
+    hit obstacle -2
+    right move + 3
+    */
+    func getWinner() {
+        
     }
     
     // generate bot move regarding to difficulty level (give bot hints)
@@ -521,10 +544,16 @@ final class Game: ObservableObject {
      */
     private func defaultZoneStates() -> [[OceanZoneState]] {
         var states = [[OceanZoneState]]()
+        var obstacleCount = (difficultyLevel == 2) ? 5 : 0
         for x in 0..<Game.numCols {
             states.append([])
             for _ in 0..<Game.numRows {
-                states[x].append(.clear)
+                if Int.random(in: 1..<100) % 2 == 0 {
+                    states[x].append(.clear)
+                } else if (obstacleCount > 0) {
+                    states[x].append(.obstacle)
+                    obstacleCount -= 1
+                }
             }
         }
         
