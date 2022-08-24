@@ -48,8 +48,20 @@ struct OceanView: View {
     func saveStateToFirestore() {
         let arr = getCurrentZoneStates(zoneStates: game.zoneStates)
         
-        // Consert array to json string
+        // Convert array to json string
         let jsonStr = arrToJson(arr: arr)!
+        
+        // Convert my fleet
+//        var myFleet = [(name: String, length: [(x: Int, y: Int, state: Int)])]()
+//        var ship1 = [(x: Int, y: Int, state: Int)]()
+//        for ship in game.fleet2.ships {
+//            myFleet.append((name: ship.name, length: [(x: 0, y: 0, state: 0)]))
+//            for (index, coordinate) in ship.coordinates().enumerated() {
+//                myFleet[myFleet.endIndex - 1].length.append((x: coordinate.x, y: coordinate.y, state: (ship.compartments[index].flooded == false ? 0 : 1)))
+////                ship1.append((x: coordinate.x, y: coordinate.y, state: (ship.compartments[index].flooded == false ? 0 : 1)))
+//            }
+//        }
+//        print("line 62 myFleet", myFleet)
         
         // Save to Firestore
 //        db.collection("users").document("nhu").updateData([
@@ -61,9 +73,14 @@ struct OceanView: View {
 //                print("Successfully updated state to Firestore!")
 //            }
 //        }
+        
+        // Convert Fleet to String
+//        print("line 76", fleetToStr(fleet: game.fleet2)!)
+        let fleetStr = fleetToStr(fleet: game.fleet2)!
         db.collection("users").document("nhu").setData([
             "pwd": "1234",
-            "state": jsonStr
+            "state": jsonStr,
+            "fleet": fleetStr
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -73,6 +90,20 @@ struct OceanView: View {
                 // Update prev state
                 game.prevZoneStates = game.zoneStates
             }
+        }
+    }
+    
+    func fleetToStr(fleet: Fleet) -> String? {
+        do {
+            let encodedData = try JSONEncoder().encode(fleet)
+            let jsonString = String(data: encodedData,
+                                    encoding: .utf8)
+            return jsonString
+        } catch {
+            //handle error
+            print(error)
+            
+            return ""
         }
     }
     

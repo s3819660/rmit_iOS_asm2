@@ -16,7 +16,7 @@ import Foundation
 /*
  the Fleet of ships in the game
  */
-class Fleet {
+class Fleet: Codable {
 //    static let shipsInFleet:[(name: String, length: Int)] = [("PT Boat", 2),
 //                                                         ("Submarine", 3),
 //                                                         ("Destroyer", 3),

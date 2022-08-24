@@ -18,7 +18,7 @@ import Foundation
  Each compartment can be individually flooded.
  If all compartments are flooded, the ship is sunk.
  */
-class Ship {
+class Ship: Codable {
     var name: String
     var compartments: [ShipCompartment]
     var length: Int {return compartments.count}
