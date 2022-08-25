@@ -37,6 +37,11 @@ final class Game: ObservableObject {
     var over: Bool {return fleet.isDestroyed()}
     var botWin: Bool {return fleet2.isDestroyed()} // game is over when player wins or bot wins
     
+    // Player's score
+    var username = ""
+    var isLoggedIn = false
+    var myScore = 0
+    
     // Bot's last hits
     var botLastHits = [Coordinate]()
     var botLastHitShips:[(name: String, length: Int)] = [("PT Boat", 2),
@@ -100,11 +105,17 @@ final class Game: ObservableObject {
      Fetch game state from Firestore
      */
     func fetchStateFromFirestore() {
-        let docRef = db.collection("users").document("nhu")
+        if self.username.isEmpty {
+            self.prevZoneStates = [[OceanZoneState]]()
+            return
+        }
+        
+        let docRef = db.collection("users").document(self.username)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 guard let state = document.get("state") as? String else {
                     print("Cannot parse Game state from document")
+                    self.prevZoneStates = [[OceanZoneState]]()
                     return
                 }
 //                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
@@ -119,15 +130,6 @@ final class Game: ObservableObject {
                 self.zoneStates = self.prevZoneStates
                 
                 // TODO: Load my fleet from Firebase
-//                self.fleet2
-            } else {
-                self.prevZoneStates = [[OceanZoneState]]()
-                print("Document does not exist")
-            }
-        }
-        
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
                 guard let fleet = document.get("fleet") as? String else {
                     print("line 121 Cannot parse Game state from document")
                     return
@@ -136,11 +138,45 @@ final class Game: ObservableObject {
 //                let ship = document.get("Submarine")
                 // TODO: Load my fleet from Firebase
                 self.fleet2 = self.jsonToFleet(jsonStr: fleet)
+                
+                guard let score = document.get("score") as? Int else {
+                    print("line 141 Cannot parse Score from document")
+                    self.myScore = 0
+                    return
+                }
+
+                // Update my score
+                self.myScore = score
             } else {
                 self.prevZoneStates = [[OceanZoneState]]()
                 print("Document does not exist")
             }
         }
+        
+//        docRef.getDocument { (document, error) in
+//            if let document = document, document.exists {
+//                guard let fleet = document.get("fleet") as? String else {
+//                    print("line 121 Cannot parse Game state from document")
+//                    return
+//                }
+//
+////                let ship = document.get("Submarine")
+//                // TODO: Load my fleet from Firebase
+//                self.fleet2 = self.jsonToFleet(jsonStr: fleet)
+//
+//                guard let score = document.get("score") as? Int else {
+//                    print("line 141 Cannot parse Score from document")
+//                    self.myScore = 0
+//                    return
+//                }
+//
+//                // Update my score
+//                self.myScore = score
+//            } else {
+//                self.prevZoneStates = [[OceanZoneState]]()
+//                print("Document does not exist")
+//            }
+//        }
     }
     
     func jsonToFleet(jsonStr: String) -> Fleet {
@@ -180,6 +216,7 @@ final class Game: ObservableObject {
         //are we done?
         if (over) {
             message += " YOU WIN!"
+            self.myScore += 1
             return
         }
         

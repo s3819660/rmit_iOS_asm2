@@ -27,6 +27,8 @@
 		89490ABC28B0FC35008F5F1C /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */; };
 		898B6E3028B1ED4200957F56 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 898B6E2F28B1ED4200957F56 /* FirebaseFirestore */; };
 		898B6E3228B1F5A600957F56 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 898B6E3128B1F5A600957F56 /* GoogleService-Info.plist */; };
+		89F2EC5F28B755BA0049C5FD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F2EC5E28B755BA0049C5FD /* LogInView.swift */; };
+		89F2EC6128B759200049C5FD /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F2EC6028B759200049C5FD /* SignUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		89490AB928B0F64D008F5F1C /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
 		898B6E3128B1F5A600957F56 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Battleship/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		89F2EC5E28B755BA0049C5FD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
+		89F2EC6028B759200049C5FD /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +130,8 @@
 				89490AB728B0F643008F5F1C /* GameView.swift */,
 				89490AB928B0F64D008F5F1C /* LeaderboardView.swift */,
 				89490ABB28B0FC35008F5F1C /* HowToPlayView.swift */,
+				89F2EC5E28B755BA0049C5FD /* LogInView.swift */,
+				89F2EC6028B759200049C5FD /* SignUpView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -208,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89490ABC28B0FC35008F5F1C /* HowToPlayView.swift in Sources */,
+				89F2EC5F28B755BA0049C5FD /* LogInView.swift in Sources */,
 				89490AAA28B0F5FB008F5F1C /* Ocean.swift in Sources */,
 				89490AAE28B0F60C008F5F1C /* Game.swift in Sources */,
 				89490A9428B0F5A3008F5F1C /* ContentView.swift in Sources */,
@@ -222,6 +229,7 @@
 				89490AA428B0F5D8008F5F1C /* Fleet.swift in Sources */,
 				89490AB228B0F628008F5F1C /* OceanZoneView.swift in Sources */,
 				89490AA228B0F5D0008F5F1C /* Coordinate.swift in Sources */,
+				89F2EC6128B759200049C5FD /* SignUpView.swift in Sources */,
 				89490AA628B0F5DF008F5F1C /* Ship.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

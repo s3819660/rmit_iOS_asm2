@@ -77,10 +77,11 @@ struct OceanView: View {
         // Convert Fleet to String
 //        print("line 76", fleetToStr(fleet: game.fleet2)!)
         let fleetStr = fleetToStr(fleet: game.fleet2)!
-        db.collection("users").document("nhu").setData([
+        db.collection("users").document(game.username).setData([
             "pwd": "1234",
             "state": jsonStr,
-            "fleet": fleetStr
+            "fleet": fleetStr,
+            "score": game.myScore
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")

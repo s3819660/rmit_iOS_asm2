@@ -16,7 +16,6 @@ import SwiftUI
 struct LeaderboardView: View {
     var body: some View {
         Text("LeaderboardView")
-//            .navigationBarHidden(true)
             .navigationBarTitle("Leaderboard", displayMode: .inline)
     }
 }
