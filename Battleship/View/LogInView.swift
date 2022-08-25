@@ -68,6 +68,7 @@ struct LogInView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     /*
@@ -83,6 +84,8 @@ struct LogInView: View {
                 }
                 if fetchedPwd == pwd {
                     game.username = username
+                    game.fetchStateFromFirestore()
+                    game.reset()
                     self.isLoggedIn = true
                 }
             } else {

@@ -16,7 +16,7 @@ import SwiftUI
 struct MenuView: View {
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var game: Game
-    @State var isResumeHidden = true // should be true for new user
+//    @State var isResumeHidden = true // should be true for new user
     
     var body: some View {
         NavigationView {
@@ -29,10 +29,10 @@ struct MenuView: View {
                     }
                         // hide Resume button if it is a new user
                         .opacity((game.prevZoneStates.isEmpty) ? 0 : 1)
-                        .onDisappear {
-                            // (Workaround) unhide Resume button for when new user creates a new game then go back to menu
-                            self.isResumeHidden = false
-                        }
+//                        .onDisappear {
+//                            // (Workaround) unhide Resume button for when new user creates a new game then go back to menu
+//                            self.isResumeHidden = false
+//                        }
                     NavigationLink(destination: GameView()) {
                         Text("New game")
                     }

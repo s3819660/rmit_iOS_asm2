@@ -14,8 +14,16 @@
 import SwiftUI
 
 struct LeaderboardView: View {
+    @EnvironmentObject var game: Game
+    
     var body: some View {
-        Text("LeaderboardView")
+        ScrollView {
+            VStack {
+                ForEach(game.leaderboard) { e in
+                    Text(e.username + " score:\(e.score)")
+                }
+            }
+        }
             .navigationBarTitle("Leaderboard", displayMode: .inline)
     }
 }

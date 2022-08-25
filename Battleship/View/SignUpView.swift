@@ -55,6 +55,7 @@ struct SignUpView: View {
             }
         }
         .navigationBarHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     /*
@@ -71,6 +72,8 @@ struct SignUpView: View {
                print("Document signing up successfully written!")
                game.username = username
                game.fetchStateFromFirestore()
+               game.reset()
+               game.prevZoneStates.removeAll()
                self.isLoggedIn = true
            }
        }

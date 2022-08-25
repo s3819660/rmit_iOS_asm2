@@ -41,6 +41,7 @@ final class Game: ObservableObject {
     var username = ""
     var isLoggedIn = false
     var myScore = 0
+    var leaderboard = [User]()
     
     // Bot's last hits
     var botLastHits = [Coordinate]()
@@ -58,7 +59,7 @@ final class Game: ObservableObject {
     var botMoveCombinations = [[Coordinate]]()
     
     // Difficulty level 0, 1, 2
-    var difficultyLevel = 1
+    var difficultyLevel = 0
     
     // Previous zone states
     var prevZoneStates = [[OceanZoneState]]()
@@ -74,6 +75,9 @@ final class Game: ObservableObject {
         
         // load prev zone states
         fetchStateFromFirestore()
+        
+        // Fetch leaderboard
+        fetchLeaderboard()
     }
     
     /*
@@ -130,14 +134,18 @@ final class Game: ObservableObject {
                 self.zoneStates = self.prevZoneStates
                 
                 // TODO: Load my fleet from Firebase
-                guard let fleet = document.get("fleet") as? String else {
-                    print("line 121 Cannot parse Game state from document")
+                guard let myFleet = document.get("myFleet") as? String else {
+                    print("line 121 Cannot parse myFleet from document")
                     return
                 }
 
-//                let ship = document.get("Submarine")
-                // TODO: Load my fleet from Firebase
-                self.fleet2 = self.jsonToFleet(jsonStr: fleet)
+                self.fleet2 = self.jsonToFleet(jsonStr: myFleet)
+                guard let botFleet = document.get("botFleet") as? String else {
+                    print("line 121 Cannot parse botFleet from document")
+                    return
+                }
+
+                self.fleet = self.jsonToFleet(jsonStr: botFleet)
                 
                 guard let score = document.get("score") as? Int else {
                     print("line 141 Cannot parse Score from document")
@@ -152,31 +160,42 @@ final class Game: ObservableObject {
                 print("Document does not exist")
             }
         }
-        
-//        docRef.getDocument { (document, error) in
-//            if let document = document, document.exists {
-//                guard let fleet = document.get("fleet") as? String else {
-//                    print("line 121 Cannot parse Game state from document")
-//                    return
-//                }
-//
-////                let ship = document.get("Submarine")
-//                // TODO: Load my fleet from Firebase
-//                self.fleet2 = self.jsonToFleet(jsonStr: fleet)
-//
-//                guard let score = document.get("score") as? Int else {
-//                    print("line 141 Cannot parse Score from document")
-//                    self.myScore = 0
-//                    return
-//                }
-//
-//                // Update my score
-//                self.myScore = score
-//            } else {
-//                self.prevZoneStates = [[OceanZoneState]]()
-//                print("Document does not exist")
-//            }
-//        }
+    }
+    
+    /*
+     Fetch leaderboard
+     */
+    func fetchLeaderboard() {
+        db.collection("users").order(by: "score", descending: true).limit(to: 20)
+            .getDocuments() { (querySnapshot, err) in
+                    if let err = err {
+                        print("Error getting documents: \(err)")
+                    } else {
+                        for document in querySnapshot!.documents {
+//                            print("\(document.documentID) => \(document.data())")
+                            guard let score = document.get("score") as? Int else {
+                                print("Cannot parse Leaderboard score from document")
+                                return
+                            }
+                            
+//                            print("document name \(document.documentID), score=\(score)")
+                            self.leaderboard.removeAll()
+                            self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score))
+                            print("leaderboard", self.leaderboard)
+                        }
+                    }
+            }
+    }
+    
+    /*
+     Update leaderboard
+     */
+    func updateLeaderboard(username: String, score: Int) {
+        guard let userIndex = leaderboard.firstIndex(where: {$0.username == username}) else {
+            print("Cannot update leaderboard. User does not exist in leaderboard")
+            return
+        }
+        leaderboard[userIndex].score = score
     }
     
     func jsonToFleet(jsonStr: String) -> Fleet {
