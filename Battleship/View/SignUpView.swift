@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @Environment(\.presentationMode) var presentation
     @EnvironmentObject var game: Game
     
     @State var username: String = ""
@@ -53,6 +54,11 @@ struct SignUpView: View {
                     .padding(Edge.Set.vertical, 20)
                 }
             }
+            .onAppear {
+                if game.isNavigatedBack {
+                    self.presentation.wrappedValue.dismiss()
+                }
+            }
         }
         .navigationBarHidden(true)
         .navigationViewStyle(StackNavigationViewStyle())
@@ -75,6 +81,9 @@ struct SignUpView: View {
                game.reset()
                game.prevZoneStates.removeAll()
                self.isLoggedIn = true
+               
+               // For when user logs out after signing up
+               game.isNavigatedBack = true
            }
        }
    }

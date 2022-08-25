@@ -38,6 +38,7 @@ final class Game: ObservableObject {
     var botWin: Bool {return fleet2.isDestroyed()} // game is over when player wins or bot wins
     
     // Player's score
+    var isNavigatedBack = false
     var username = ""
     var isLoggedIn = false
     var myScore = 0
