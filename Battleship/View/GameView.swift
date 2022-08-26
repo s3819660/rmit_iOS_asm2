@@ -25,6 +25,7 @@ struct GameView: View {
         .onAppear(perform: handleResumeGame)
         // Hide navigation bar
         .navigationBarHidden(true)
+        .background(Color("BackgroundColor"))
     }
     
     func handleResumeGame() {
@@ -42,5 +43,6 @@ struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()
             .environmentObject(Game())
+            .preferredColorScheme(.dark)
     }
 }

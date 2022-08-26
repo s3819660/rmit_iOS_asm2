@@ -148,7 +148,6 @@ final class Game: ObservableObject {
 
                 // Update my score
                 self.myScore = score
-                print("line 151 myscore", self.myScore)
             } else {
                 self.prevZoneStates = [[OceanZoneState]]()
                 print("Document does not exist")

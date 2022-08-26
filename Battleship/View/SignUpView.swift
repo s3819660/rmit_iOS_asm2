@@ -18,47 +18,52 @@ struct SignUpView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                TextField("Username", text: $username)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(.gray.opacity(0.2))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(.gray.opacity(0.2))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
+            ZStack {
+                Color("BackgroundColor")
                 
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .opacity(errorMessage.isEmpty ? 0 : 1)
-                
-                NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
-                    Button(action: {
-                        if (isInputValid(username: username, pwd: password)) {
-                            signUp(username: username, pwd: password)
+                VStack {
+                    TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.bottom, 20)
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.bottom, 20)
+                    
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .opacity(errorMessage.isEmpty ? 0 : 1)
+                    
+                    NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
+                        Button(action: {
+                            if (isInputValid(username: username, pwd: password)) {
+                                signUp(username: username, pwd: password)
+                            }
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text("Sign Up").foregroundColor(Color.white).bold()
+                                Spacer()
+                            }
                         }
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Sign Up").foregroundColor(Color.white).bold()
-                            Spacer()
-                        }
+                        .accentColor(Color.black)
+                        .padding()
+                        .background(Color(UIColor.darkGray))
+                        .cornerRadius(4.0)
+                        .padding(Edge.Set.vertical, 20)
                     }
-                    .accentColor(Color.black)
-                    .padding()
-                    .background(Color(UIColor.darkGray))
-                    .cornerRadius(4.0)
-                    .padding(Edge.Set.vertical, 20)
+                }
+                .onAppear {
+                    if game.isNavigatedBack {
+                        self.presentation.wrappedValue.dismiss()
+                    }
                 }
             }
-            .onAppear {
-                if game.isNavigatedBack {
-                    self.presentation.wrappedValue.dismiss()
-                }
-            }
+            .edgesIgnoringSafeArea(.all)
         }
         .navigationBarHidden(true)
         .navigationViewStyle(StackNavigationViewStyle())
