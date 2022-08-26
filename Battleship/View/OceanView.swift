@@ -31,7 +31,8 @@ struct OceanView: View {
                     let x = index - (y * Game.numCols)
                     let location = Coordinate(x: x, y: y)
                     OceanZoneView(state: $game.zoneStates[x][y])
-                        .frame(height: geo.size.height/CGFloat(Game.numRows))
+//                        .frame(height: geo.size.height/CGFloat(Game.numRows))
+                        .frame(height: min(geo.size.height/CGFloat(Game.numRows), geo.size.width/CGFloat(Game.numCols)))
                         .onTapGesture {
                             // if my turn
                             if (game.isMyTurn) {
@@ -41,8 +42,13 @@ struct OceanView: View {
 
                 }
             }
+            .frame(width: min(geo.size.width, geo.size.height))
+            .frame(maxHeight: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .onDisappear(perform: saveStateToFirestore)
+        
+//        Spacer(minLength: 20)
     }
     
     func saveStateToFirestore() {

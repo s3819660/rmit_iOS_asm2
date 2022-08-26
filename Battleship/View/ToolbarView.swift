@@ -29,7 +29,7 @@ struct ToolbarView: View {
             Button(action: backToMenu) {Image(systemName: "stop")}
                 .foregroundColor(.accentColor)
                 .padding(.leading, 10)
-        }.frame(height: 30)
+        }.frame(height: 50)
     }
     
     func reset() {

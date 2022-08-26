@@ -24,8 +24,7 @@ struct OceanZoneView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .strokeBorder(.black, lineWidth: 2)
-                .background(.blue)
+                .strokeBorder(.gray.opacity(0.3), lineWidth: 2)
             
             if (state != .clear) {
                 ScaledShape(shape: Circle(), scale: circleScale)

@@ -17,56 +17,61 @@ struct LogInView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                TextField("Username", text: $username)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(.gray.opacity(0.2))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(.gray.opacity(0.2))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
+            ZStack {
+                Color("BackgroundColor")
                 
-                NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
-                    Button(action: {
-                        if (isInputValid(username: username, pwd: password)) {
-                            logIn(username: username, pwd: password)
+                VStack {
+                    TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.bottom, 20)
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                        .cornerRadius(5.0)
+                        .padding(.bottom, 20)
+                    
+                    NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
+                        Button(action: {
+                            if (isInputValid(username: username, pwd: password)) {
+                                logIn(username: username, pwd: password)
+                            }
+                            
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text("Login").foregroundColor(Color.white).bold()
+                                Spacer()
+                            }
                         }
-                        
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Login").foregroundColor(Color.white).bold()
-                            Spacer()
-                        }
+                        .accentColor(Color.black)
+                        .padding()
+                        .background(Color(UIColor.darkGray))
+                        .cornerRadius(4.0)
+                        .padding(Edge.Set.vertical, 20)
                     }
-                    .accentColor(Color.black)
-                    .padding()
-                    .background(Color(UIColor.darkGray))
-                    .cornerRadius(4.0)
-                    .padding(Edge.Set.vertical, 20)
-                }
-                
-                NavigationLink(destination: SignUpView(), isActive: $isSignUpLinkActive) {
-                    Button(action: {
-                        self.isSignUpLinkActive = true
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("Sign Up").foregroundColor(Color.white).bold()
-                            Spacer()
+                    
+                    NavigationLink(destination: SignUpView(), isActive: $isSignUpLinkActive) {
+                        Button(action: {
+                            self.isSignUpLinkActive = true
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text("Sign Up").foregroundColor(Color.white).bold()
+                                Spacer()
+                            }
                         }
+                        .accentColor(Color.black)
+                        .padding()
+                        .background(Color(UIColor.darkGray))
+                        .cornerRadius(4.0)
+                        .padding(Edge.Set.vertical, 20)
                     }
-                    .accentColor(Color.black)
-                    .padding()
-                    .background(Color(UIColor.darkGray))
-                    .cornerRadius(4.0)
-                    .padding(Edge.Set.vertical, 20)
                 }
             }
+            .edgesIgnoringSafeArea(.all)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
