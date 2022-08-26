@@ -76,11 +76,14 @@ struct OceanView: View {
         
         // Convert Fleet to String
 //        print("line 76", fleetToStr(fleet: game.fleet2)!)
-        let fleetStr = fleetToStr(fleet: game.fleet2)!
-        db.collection("users").document("nhu").setData([
+        let myFleetStr = fleetToStr(fleet: game.fleet2)!
+        let botFleetStr = fleetToStr(fleet: game.fleet)!
+        db.collection("users").document(game.username).setData([
             "pwd": "1234",
             "state": jsonStr,
-            "fleet": fleetStr
+            "myFleet": myFleetStr,
+            "botFleet": botFleetStr,
+            "score": game.myScore
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -91,6 +94,9 @@ struct OceanView: View {
                 game.prevZoneStates = game.zoneStates
             }
         }
+        
+        // Update leaderboard
+        game.updateLeaderboard(username: game.username, score: game.myScore)
     }
     
     func fleetToStr(fleet: Fleet) -> String? {

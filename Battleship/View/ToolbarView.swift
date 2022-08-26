@@ -37,6 +37,7 @@ struct ToolbarView: View {
     }
     
     func backToMenu() {
+        game.prevZoneStates = game.zoneStates
         self.presentation.wrappedValue.dismiss()
     }
 }
