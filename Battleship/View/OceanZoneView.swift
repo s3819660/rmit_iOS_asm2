@@ -26,7 +26,9 @@ struct OceanZoneView: View {
             Rectangle()
                 .strokeBorder(.gray.opacity(0.3), lineWidth: 2)
                 .background(Color("BackgroundColor"))
-            
+//            Image("ship2_2h")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
             if (state != .clear) {
                 ScaledShape(shape: Circle(), scale: circleScale)
                     .fill(circleColor())
