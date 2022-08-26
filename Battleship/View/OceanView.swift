@@ -32,6 +32,7 @@ struct OceanView: View {
                     let location = Coordinate(x: x, y: y)
                     OceanZoneView(state: $game.zoneStates[x][y])
 //                        .frame(height: geo.size.height/CGFloat(Game.numRows))
+                    // comment the line below to disable square ocean view
                         .frame(height: min(geo.size.height/CGFloat(Game.numRows), geo.size.width/CGFloat(Game.numCols)))
                         .onTapGesture {
                             // if my turn
@@ -42,6 +43,7 @@ struct OceanView: View {
 
                 }
             }
+            // comment the 3 lines below to disable square ocean view
             .frame(width: min(geo.size.width, geo.size.height))
             .frame(maxHeight: .infinity, alignment: .center)
             .frame(maxWidth: .infinity, alignment: .center)
