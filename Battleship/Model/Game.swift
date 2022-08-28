@@ -176,7 +176,7 @@ final class Game: ObservableObject {
                             }
                             
 //                            print("document name \(document.documentID), score=\(score)")
-                            self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score))
+                            self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score, image: "avatar_\(Int.random(in: 1..<6))"))
                         }
                     }
             }
@@ -219,6 +219,7 @@ final class Game: ObservableObject {
         //if we already tapped this location or the game is over, just ignore it
         if ((zoneStates[location.x][location.y] != .clear) || over || (zoneStates[location.x][location.y] == .myCompartment)) {
             print("invalid tap, tap again")
+            playSound(sound: "invalid", type: "wav")
             return
         }
         
@@ -227,6 +228,8 @@ final class Game: ObservableObject {
             hitShip.hit(at: location)
             zoneStates[location.x][location.y] = .hit
             message = hitShip.isSunk() ? "You sunk their \(hitShip.name)!" : "You Hit"
+            
+            playSound(sound: "explosion", type: "wav")
         } else {
             zoneStates[location.x][location.y] = .miss
             message = "You Miss"
@@ -236,6 +239,7 @@ final class Game: ObservableObject {
         if (over) {
             message += " YOU WIN!"
             self.myScore += 1
+            playSound(sound: "win", type: "mp3")
             return
         }
         
@@ -295,6 +299,7 @@ final class Game: ObservableObject {
             //are we done?
             if (self.botWin) {
                 self.message += " BOT WIN!"
+                playSound(sound: "lose", type: "wav")
                 return // end game so player can no longer tap
             }
             
@@ -309,21 +314,9 @@ final class Game: ObservableObject {
         
         // Bot doesn't know where my ships are
         // Random bot move
-        if difficultyLevel == 0 {
-            let randomInt = Int.random(in: 0..<100)
-            if randomInt > 50 {
-                location = getBotNextMove()
-            } else {
-                location = getConsecutiveStep()
-            }
-        } else if difficultyLevel == 1 { // Bot knows where 30% of my ships are (2 ships)
-            let randomInt = Int.random(in: 0..<100)
-            if randomInt > 35 {
-                location = getBotNextMove()
-            } else {
-                location = getConsecutiveStep()
-            }
-        } else { // Bot knows where 60% of my ships are (3.5 ships)
+        if ((difficultyLevel < 2) && (Int.random(in: 0..<100) <= (difficultyLevel == 0 ? 50 : 35))) {
+            location = getConsecutiveStep()
+        } else { 
             location = getBotNextMove()
             while (!isBotValidMove(x: location.x, y: location.y)) {
                 location = getBotNextMove()

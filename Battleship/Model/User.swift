@@ -11,4 +11,5 @@ struct User: Identifiable {
     var id = 0
     var username = ""
     var score = 0
+    var image = "avatar_1"
 }
