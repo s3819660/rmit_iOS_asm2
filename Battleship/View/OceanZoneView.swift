@@ -32,9 +32,12 @@ struct OceanZoneView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }
-            if (state != .clear && state != .myCompartment) {
+            if (state == .miss || state == .opponentMiss) {
+                ScaledShape(shape: Circle(), scale: circleScale)
+                    .fill(.gray.opacity(0.3))
+            } else if (state != .clear && state != .myCompartment) {
                 ScaledShape(shape: XMark(), scale: circleScale)
-                    .stroke(circleColor(), lineWidth: 6)
+                    .stroke(circleColor(), lineWidth: 3)
             }
         }
     }
