@@ -68,7 +68,6 @@ struct SettingsView: View {
         .navigationViewStyle(.stack)
         .navigationBarTitleDisplayMode(.inline)
         .edgesIgnoringSafeArea(.all)
-        .font(.title2)
     }
 }
 

@@ -176,7 +176,7 @@ final class Game: ObservableObject {
                             }
                             
 //                            print("document name \(document.documentID), score=\(score)")
-                            self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score))
+                            self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score, image: "avatar_\(Int.random(in: 1..<6))"))
                         }
                     }
             }
