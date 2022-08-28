@@ -30,7 +30,7 @@ struct OceanView: View {
                     let y = index / Game.numRows
                     let x = index - (y * Game.numCols)
                     let location = Coordinate(x: x, y: y)
-                    OceanZoneView(state: $game.zoneStates[x][y])
+                    OceanZoneView(state: $game.zoneStates[x][y], image: game.fleet2.getShipImage(location: Coordinate(x: x, y: y)))
 //                        .frame(height: geo.size.height/CGFloat(Game.numRows))
                     // comment the line below to disable square ocean view
                         .frame(height: min(geo.size.height/CGFloat(Game.numRows), geo.size.width/CGFloat(Game.numCols)))

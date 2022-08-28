@@ -133,4 +133,38 @@ class Fleet: Codable {
         
         return Array(coordinates.joined())
     }
+    
+    /*
+     Check if ship is horizontal
+     */
+    func isShipHorizontal(coordinates: [Coordinate]) -> Bool {
+        return coordinates[1].x > coordinates[0].x
+    }
+
+    /*
+    Get image based on location
+    */
+    func getShipImage(location: Coordinate) -> String {
+        // get ship
+        guard let ship = self.ships.first(where: {$0.coordinates().contains(location)}) else {
+//            print("Model Fleet: Cannot find ship in Fleet")
+            return ""
+        }
+        // get index of compartment based on ship
+        let index = ship.coordinates().firstIndex(where: {$0.x == location.x && $0.y == location.y})
+        let numOfCompartments = ship.length
+        if index == 0 {
+            if isShipHorizontal(coordinates: ship.coordinates()) {
+                return numOfCompartments == 2 ? "ship2_1h" : "ship3_1h"
+            }
+            return numOfCompartments == 2 ? "ship2_2v" : "ship3_3v"
+        } else if index == 1 {
+            if isShipHorizontal(coordinates: ship.coordinates()) {
+                return numOfCompartments == 2 ? "ship2_2h" : "ship3_2h"
+            }
+            return numOfCompartments == 2 ? "ship2_1v" : "ship3_2v"
+        } else {
+            return isShipHorizontal(coordinates: ship.coordinates()) ? "ship3_3h" : "ship3_1v"
+        }
+    }
 }
