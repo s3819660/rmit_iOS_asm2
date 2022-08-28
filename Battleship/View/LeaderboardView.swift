@@ -29,7 +29,11 @@ struct LeaderboardView: View {
                                    score: game.leaderboard[i].score,
                                    rating: (i < 1) ? 5 : (i < 2) ? 4.5 : (i < 4) ? 4 : (i < 8) ? 3.5 : (i < 12) ? 4 : (i < 16) ? 4.5 : 5,
                                    avatarImage: game.leaderboard[i].image,
-                                   medalImage: (i < 1) ? "medal_1" : (i < 2) ? "medal_2" : (i < 2) ? "medal_3" : "")
+                                   medalImage: (i < 1) ? "medal_1" : (i < 2) ? "medal_2" : (i < 3) ? "medal_3" : "",
+                                   rank: i)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 30)
+                                    .padding(.horizontal, 10)
                     }
                 }
             }
@@ -44,7 +48,7 @@ struct LeaderCard: View {
     var rating:Float = 3.5
     var avatarImage = "avatar_1"
     var medalImage = "medal_1"
-    
+    var rank = 0
     
     var body: some View {
         GeometryReader { geo in
@@ -53,23 +57,30 @@ struct LeaderCard: View {
                     Image(medalImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: geo.size.height * 6)
-                        .padding(.leading, 20)
+                        .frame(height: geo.size.height * 5)
+                        .padding(.leading, 10)
+                } else {
+                    Text("\(rank + 1)")
+                        .font(.title)
+                        .bold()
+                        .padding(.trailing, 10)
                 }
 
                 if (geo.size.width > 450) {
                     Image(avatarImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: geo.size.height * 7)
+                        .frame(height: geo.size.height * 6)
                         .padding(.leading, 10)
                 }
                 
                 HStack {
-                    Text(username)
+//                    Text(username.count > 15 ? "\(username.prefix(12))..." : username)
+                    Text(getUsernameStr(username: username,screenWidth: geo.size.width))
                         .font(.title3)
                         .bold()
-                        .padding(.leading, 20)
+                        .padding(.leading, 10)
+                        .frame(width: (geo.size.width > 450) ? 200 : 110)
                     Spacer()
                     StarsView(rating: self.rating)
                     Spacer()
@@ -78,14 +89,21 @@ struct LeaderCard: View {
                         .bold()
                         .padding(.trailing, 20)
                 }
-                .frame(maxWidth: .infinity)
                 .frame(height: 50)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(10)
-                .padding(.vertical, 6)
-                .padding(.horizontal)
+                .padding(.leading, 10)
+                .frame(maxWidth: (geo.size.width > 700) ? 450 : .infinity, alignment: .center)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
+    }
+    
+    func getUsernameStr(username: String, screenWidth: CGFloat) -> String {
+        if (screenWidth < 451) {
+            return username.count > 8 ? "\(username.prefix(6))..." : username
+        }
+        return username.count > 15 ? "\(username.prefix(12))..." : username
     }
 }
 
