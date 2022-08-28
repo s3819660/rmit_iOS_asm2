@@ -39,7 +39,7 @@ struct MenuView: View {
                     NavigationLink(destination: LeaderboardView()) {
                         Text("Leaderboard")
                     }
-                    NavigationLink(destination: HowToPlayView()) {
+                    NavigationLink(destination: SettingsView()) {
                         Text("Settings")
                     }
                     NavigationLink(destination: HowToPlayView()) {
@@ -61,6 +61,7 @@ struct MenuView: View {
             // fix NSLayoutContraints warnings
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarHidden(true) // hide navigation from Log In page
+            .accentColor(.white)
     }
 }
 
