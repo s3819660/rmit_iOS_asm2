@@ -309,21 +309,9 @@ final class Game: ObservableObject {
         
         // Bot doesn't know where my ships are
         // Random bot move
-        if difficultyLevel == 0 {
-            let randomInt = Int.random(in: 0..<100)
-            if randomInt > 50 {
-                location = getBotNextMove()
-            } else {
-                location = getConsecutiveStep()
-            }
-        } else if difficultyLevel == 1 { // Bot knows where 30% of my ships are (2 ships)
-            let randomInt = Int.random(in: 0..<100)
-            if randomInt > 35 {
-                location = getBotNextMove()
-            } else {
-                location = getConsecutiveStep()
-            }
-        } else { // Bot knows where 60% of my ships are (3.5 ships)
+        if ((difficultyLevel < 2) && (Int.random(in: 0..<100) <= (difficultyLevel == 0 ? 50 : 35))) {
+            location = getConsecutiveStep()
+        } else { 
             location = getBotNextMove()
             while (!isBotValidMove(x: location.x, y: location.y)) {
                 location = getBotNextMove()

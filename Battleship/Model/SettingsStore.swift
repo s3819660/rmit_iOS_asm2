@@ -16,9 +16,8 @@ import Combine
 
 final class SettingsStore: ObservableObject {
     private enum Keys {
-        static let notificationEnabled = "notifications_enabled"
-        static let sleepTrackingEnabled = "sleep_tracking_enabled"
-        static let sleepTrackingMode = "sleep_tracking_mode"
+        static let isSoundOn = "sound_on"
+        static let difficultyLevel = "difficulty_level"
         static let isDarkMode = "app_UI_mode"
     }
 
@@ -31,8 +30,8 @@ final class SettingsStore: ObservableObject {
         self.defaults = defaults
 
         defaults.register(defaults: [
-            Keys.sleepTrackingEnabled: true,
-            Keys.sleepTrackingMode: SleepTrackingMode.moderate.rawValue
+            Keys.isSoundOn: true,
+            Keys.difficultyLevel: DifficultyLevel.moderate.rawValue
             ])
 
         cancellable = NotificationCenter.default
@@ -41,14 +40,9 @@ final class SettingsStore: ObservableObject {
             .subscribe(objectWillChange)
     }
 
-    var isNotificationEnabled: Bool {
-        set { defaults.set(newValue, forKey: Keys.notificationEnabled) }
-        get { defaults.bool(forKey: Keys.notificationEnabled) }
-    }
-
-    var isSleepTrackingEnabled: Bool {
-        set { defaults.set(newValue, forKey: Keys.sleepTrackingEnabled) }
-        get { defaults.bool(forKey: Keys.sleepTrackingEnabled) }
+    var isSoundOn: Bool {
+        set { defaults.set(newValue, forKey: Keys.isSoundOn) }
+        get { defaults.bool(forKey: Keys.isSoundOn) }
     }
     
     var isDarkMode: Bool {
@@ -56,20 +50,20 @@ final class SettingsStore: ObservableObject {
         get { defaults.bool(forKey: Keys.isDarkMode) }
     }
 
-    enum SleepTrackingMode: String, CaseIterable {
+    enum DifficultyLevel: String, CaseIterable {
         case easy
         case moderate
         case hard
     }
 
-    var sleepTrackingMode: SleepTrackingMode {
+    var difficultyLevel: DifficultyLevel {
         get {
-            return defaults.string(forKey: Keys.sleepTrackingMode)
-                .flatMap { SleepTrackingMode(rawValue: $0) } ?? .moderate
+            return defaults.string(forKey: Keys.difficultyLevel)
+                .flatMap { DifficultyLevel(rawValue: $0) } ?? .moderate
         }
 
         set {
-            defaults.set(newValue.rawValue, forKey: Keys.sleepTrackingMode)
+            defaults.set(newValue.rawValue, forKey: Keys.difficultyLevel)
         }
     }
 }

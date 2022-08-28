@@ -61,7 +61,7 @@ struct MenuView: View {
             // fix NSLayoutContraints warnings
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarHidden(true) // hide navigation from Log In page
-            .accentColor(.white)
+            .accentColor(Color("TextColor"))
     }
 }
 

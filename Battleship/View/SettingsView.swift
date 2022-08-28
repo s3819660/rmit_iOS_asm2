@@ -16,6 +16,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var game: Game
     
     var body: some View {
         ZStack {
@@ -24,20 +25,33 @@ struct SettingsView: View {
             Form {
                 Section(header: Text("Difficulty")) {
                     Picker(
-                        selection: $settings.sleepTrackingMode,
+                        selection: $settings.difficultyLevel,
                         label: Text("Bot's intelligence")
                     ) {
-                        ForEach(SettingsStore.SleepTrackingMode.allCases, id: \.self) {
+                        ForEach(SettingsStore.DifficultyLevel.allCases, id: \.self) {
                             Text($0.rawValue).tag($0)
                         }
                     }
+                    // handle difficulty changed
+                    .onChange(of: settings.difficultyLevel, perform: { (value) in
+                        switch value {
+                        case .moderate:
+                            game.difficultyLevel = 1
+                        case .hard:
+                            game.difficultyLevel = 2
+                        default:
+                            game.difficultyLevel = 0
+                        }
+                        
+                        print("game diff=", game.difficultyLevel)
+                    })
                     .labelsHidden()
                     .pickerStyle(.inline)
                 }
                 .listRowBackground(Color.gray.opacity(0.2))
 
                 Section(header: Text("Sound")) {
-                    Toggle(isOn: $settings.isSleepTrackingEnabled) {
+                    Toggle(isOn: $settings.isSoundOn) {
                         Text("Sound on:")
                     }
                 }
