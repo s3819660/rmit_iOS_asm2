@@ -15,6 +15,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.presentationMode) var presentation
     @EnvironmentObject var settings: SettingsStore
     @EnvironmentObject var game: Game
     
@@ -54,6 +55,10 @@ struct SettingsView: View {
                     Toggle(isOn: $settings.isSoundOn) {
                         Text("Sound on")
                     }
+                    // handle sound settings changed
+                    .onChange(of: settings.isSoundOn, perform: { (value) in
+                        game.isSoundOn = value
+                    })
                 }
                 .listRowBackground(Color.gray.opacity(0.2))
                 Section(header: Text("Theme")) {
@@ -62,6 +67,16 @@ struct SettingsView: View {
                     }
                 }
                 .listRowBackground(Color.gray.opacity(0.2))
+
+                Section {
+                    Button(action: {
+                        game.isLoggedOut = true
+                        self.presentation.wrappedValue.dismiss()
+                        print("isLoggedOut \(game.isLoggedOut)")
+                    }) {
+                        Text("Log Out")
+                    }
+                }
             }
         }
         .navigationBarTitle(Text("Settings"))

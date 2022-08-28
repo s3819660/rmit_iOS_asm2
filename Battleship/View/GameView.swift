@@ -23,6 +23,7 @@ struct GameView: View {
             OceanView()
         }
         .onAppear(perform: handleResumeGame)
+        .onDisappear(perform: handleStopGame)
         // Hide navigation bar
         .navigationBarHidden(true)
         .background(Color("BackgroundColor"))
@@ -36,6 +37,15 @@ struct GameView: View {
             // if not reset to new game
             game.reset()
         }
+
+        // Play background music
+        if game.isSoundOn {
+            playBackgroundAudio(sound: "game_background_audio", type: "mp3")
+        }
+    }
+
+    func handleStopGame() {
+        pauseBackgroundAudio()
     }
 }
 

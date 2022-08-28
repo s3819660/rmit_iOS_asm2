@@ -39,10 +39,12 @@ final class Game: ObservableObject {
     
     // Player's score
     var isNavigatedBack = false
+    var isLoggedOut = false
     var username = ""
     var isLoggedIn = false
     var myScore = 0
     var leaderboard = [User]()
+    var isSoundOn = true
     
     // Bot's last hits
     var botLastHits = [Coordinate]()
@@ -219,7 +221,9 @@ final class Game: ObservableObject {
         //if we already tapped this location or the game is over, just ignore it
         if ((zoneStates[location.x][location.y] != .clear) || over || (zoneStates[location.x][location.y] == .myCompartment)) {
             print("invalid tap, tap again")
-            playSound(sound: "invalid", type: "wav")
+            if self.isSoundOn {
+                playSound(sound: "invalid", type: "wav")
+            }
             return
         }
         
@@ -229,7 +233,9 @@ final class Game: ObservableObject {
             zoneStates[location.x][location.y] = .hit
             message = hitShip.isSunk() ? "You sunk their \(hitShip.name)!" : "You Hit"
             
-            playSound(sound: "explosion", type: "wav")
+            if self.isSoundOn {
+                playSound(sound: "explosion", type: "wav")
+            }
         } else {
             zoneStates[location.x][location.y] = .miss
             message = "You Miss"
@@ -239,7 +245,10 @@ final class Game: ObservableObject {
         if (over) {
             message += " YOU WIN!"
             self.myScore += 1
-            playSound(sound: "win", type: "mp3")
+            
+            if self.isSoundOn {
+                playSound(sound: "win", type: "mp3")
+            }
             return
         }
         
@@ -299,7 +308,9 @@ final class Game: ObservableObject {
             //are we done?
             if (self.botWin) {
                 self.message += " BOT WIN!"
-                playSound(sound: "lose", type: "wav")
+                if self.isSoundOn {
+                    playSound(sound: "lose", type: "wav")
+                }
                 return // end game so player can no longer tap
             }
             

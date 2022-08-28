@@ -38,6 +38,7 @@ struct OceanZoneView: View {
             } else if (state != .clear && state != .myCompartment) {
                 ScaledShape(shape: XMark(), scale: circleScale)
                     .stroke(circleColor(), lineWidth: 3)
+                    .modifier(Shake(animatableData: CGFloat(6)))
             }
         }
     }
@@ -65,6 +66,19 @@ struct XMark: Shape {
         return path
     }
 }
+
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX:
+		    amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
+		    y: 0))
+    }
+}
+
 
 struct OceanZoneView_Previews: PreviewProvider {
     static var previews: some View {

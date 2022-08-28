@@ -96,6 +96,11 @@ struct LeaderCard: View {
                 .frame(maxWidth: (geo.size.width > 700) ? 450 : .infinity, alignment: .center)
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            .onAppear {
+                if game.isSoundOn {
+                    playBackgroundAudio(sound: "leaderboard_background_audio", type: "mp3")
+                }
+            }
         }
     }
     

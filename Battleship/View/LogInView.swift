@@ -14,6 +14,7 @@ struct LogInView: View {
     @State var password: String = ""
     @State var isSignUpLinkActive = false
     @State var isLoggedIn = false
+    @State var errorMessage = ""
     
     var body: some View {
         NavigationView {
@@ -21,35 +22,44 @@ struct LogInView: View {
                 Color("BackgroundColor")
                 
                 VStack {
+                    Text("Welcome back, commander!")
+                        .font(.largeTitle)
+                    Spacer()
                     TextField("Username", text: $username)
                         .autocapitalization(.none)
                         .padding()
-                        .background(.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .background(.white)
+                        // .cornerRadius(5.0)
                         .padding(.bottom, 20)
+                        .border(Color("SecondaryColor"))
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .background(.white)
+                        // .cornerRadius(5.0)
                         .padding(.bottom, 20)
+                        .border(Color("SecondaryColor"))
+                    Text(errorMessage)
+                        .foregroundColor(Color("ErrorMessageColor"))
+                        .opacity(errorMessage.isEmpty ? 0 : 1)
                     
                     NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
                         Button(action: {
                             if (isInputValid(username: username, pwd: password)) {
                                 logIn(username: username, pwd: password)
+                                game.isLoggedOut = false
                             }
                             
                         }) {
                             HStack {
                                 Spacer()
-                                Text("Login").foregroundColor(Color.white).bold()
+                                Text("Log In").foregroundColor(Color.white).bold()
                                 Spacer()
                             }
                         }
-                        .accentColor(Color.black)
+                        .accentColor(Color.white)
                         .padding()
-                        .background(Color(UIColor.darkGray))
-                        .cornerRadius(4.0)
+                        .background(Color("AccentColor"))
+                        // .cornerRadius(4.0)
                         .padding(Edge.Set.vertical, 20)
                     }
                     
@@ -63,15 +73,20 @@ struct LogInView: View {
                                 Spacer()
                             }
                         }
-                        .accentColor(Color.black)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25).stroke(Color("AccentColor"), lineWidth: 2)
+                        )
+                        .accentColor(Color.white)
                         .padding()
-                        .background(Color(UIColor.darkGray))
-                        .cornerRadius(4.0)
+                        .background(Color.clear)
+                        .cornerRadius(25)
                         .padding(Edge.Set.vertical, 20)
+                        .border(Color("AccentColor"), width: 4)
                     }
                 }
             }
             .edgesIgnoringSafeArea(.all)
+            .padding()
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -85,6 +100,7 @@ struct LogInView: View {
             if let document = document, document.exists {
                 guard let fetchedPwd = document.get("pwd") as? String else {
                     print("Cannot parse Pwd from document")
+                    errorMessage = "Invalid password! Please enter again."
                     return
                 }
                 if fetchedPwd == pwd {
@@ -95,6 +111,7 @@ struct LogInView: View {
                 }
             } else {
                 print("User does not exist")
+                errorMessage = "Username does not exist!"
             }
         }
     }
@@ -104,8 +121,9 @@ struct LogInView: View {
      */
     func isInputValid(username: String, pwd: String) -> Bool {
         var isValid = true
-        if (username.isEmpty || password.isEmpty) {
+        if (username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             isValid = false
+            errorMessage = "Username and password cannot be empty!"
         }
         
         return isValid

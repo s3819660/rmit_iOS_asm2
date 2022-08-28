@@ -49,6 +49,7 @@ struct OceanView: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .onDisappear(perform: saveStateToFirestore)
+        .transition(.slide)
         
 //        Spacer(minLength: 20)
     }

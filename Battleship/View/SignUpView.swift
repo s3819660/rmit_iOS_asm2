@@ -22,26 +22,33 @@ struct SignUpView: View {
                 Color("BackgroundColor")
                 
                 VStack {
+                    Text("Welcome on board!")
+                        .font(.largeTitle)
+                    Spacer()
+
                     TextField("Username", text: $username)
                         .autocapitalization(.none)
                         .padding()
-                        .background(.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .background(.white)
+                        // .cornerRadius(5.0)
                         .padding(.bottom, 20)
+                        .border(Color("SecondaryColor"))
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .background(.white)
+                        // .cornerRadius(5.0)
                         .padding(.bottom, 20)
+                        .border(Color("SecondaryColor"))
                     
                     Text(errorMessage)
-                        .foregroundColor(.red)
+                        .foregroundColor(Color("ErrorMessageColor"))
                         .opacity(errorMessage.isEmpty ? 0 : 1)
                     
                     NavigationLink(destination: MenuView(), isActive: $isLoggedIn) {
                         Button(action: {
                             if (isInputValid(username: username, pwd: password)) {
                                 signUp(username: username, pwd: password)
+                                game.isLoggedOut = false
                             }
                         }) {
                             HStack {
@@ -52,8 +59,8 @@ struct SignUpView: View {
                         }
                         .accentColor(Color.black)
                         .padding()
-                        .background(Color(UIColor.darkGray))
-                        .cornerRadius(4.0)
+                        .background(Color("AccentColor"))
+                        // .cornerRadius(4.0)
                         .padding(Edge.Set.vertical, 20)
                     }
                 }
@@ -79,6 +86,7 @@ struct SignUpView: View {
        ]) { err in
            if let err = err {
                print("Error signing up document: \(err)")
+               errorMessage = "Cannot sign up due to connection error!"
            } else {
                print("Document signing up successfully written!")
                game.username = username
@@ -101,6 +109,17 @@ struct SignUpView: View {
         if (username.isEmpty || password.isEmpty) {
             isValid = false
             errorMessage = "Username and password cannot be empty."
+        }
+
+        let docRef = db.collection("users").document(username)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                // let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                // print("Document data: \(dataDescription)")
+                
+                isValid = false
+                errorMessage = "Username already exists!"
+            }
         }
         
         return isValid

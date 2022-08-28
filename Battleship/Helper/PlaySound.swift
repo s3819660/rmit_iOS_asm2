@@ -7,6 +7,7 @@
 
 import AVFoundation
 
+var backgroundAudioPlayer = AVAudioPlayer?
 var audioPlayer: AVAudioPlayer?
 
 func playSound(sound: String, type: String) {
@@ -17,5 +18,28 @@ func playSound(sound: String, type: String) {
         } catch {
             print("ERROR: Could not find and play the sound file!")
         }
+    }
+}
+
+func playBackgroundAudio(sound: String, type: String) {
+        if let path = Bundle.main.path(forResource: sound, ofType: type) {
+        do {
+            backgroundAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+            // backgroundAudioPlayer.currentTime = 0
+            backgroundAudioPlayer.seek(to: CMTime.zero)
+            // infinite loop
+            backgroundAudioPlayer.numberOfLoops =  -1 
+            backgroundAudioPlayer?.play()
+        } catch {
+            print("ERROR: Could not find and play the sound file!")
+        }
+    }
+}
+
+func pauseBackgroundAudio() { 
+    do {
+        backgroundAudioPlayer.pause()
+    } catch {
+        print("Cannot pause background audio!")
     }
 }
