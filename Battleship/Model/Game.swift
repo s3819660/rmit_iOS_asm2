@@ -239,7 +239,7 @@ final class Game: ObservableObject {
         if (over) {
             message += " YOU WIN!"
             self.myScore += 1
-            playSound(sound: "win", type: "wav")
+            playSound(sound: "win", type: "mp3")
             return
         }
         

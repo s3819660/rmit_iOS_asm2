@@ -12,7 +12,7 @@
 		8941E8B228BB877200683D66 /* invalid.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B128BB877200683D66 /* invalid.wav */; };
 		8941E8B428BB87E800683D66 /* lose.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B328BB87E800683D66 /* lose.wav */; };
 		8941E8B628BB881700683D66 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B528BB881700683D66 /* explosion.wav */; };
-		8941E8B828BB882900683D66 /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B728BB882900683D66 /* win.mp3 */; };
+		8941E8BA28BB897000683D66 /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B928BB897000683D66 /* win.mp3 */; };
 		89490A9228B0F5A3008F5F1C /* BattleshipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490A9128B0F5A3008F5F1C /* BattleshipApp.swift */; };
 		89490A9428B0F5A3008F5F1C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89490A9328B0F5A3008F5F1C /* ContentView.swift */; };
 		89490A9628B0F5A4008F5F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89490A9528B0F5A4008F5F1C /* Assets.xcassets */; };
@@ -45,7 +45,7 @@
 		8941E8B128BB877200683D66 /* invalid.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = invalid.wav; sourceTree = "<group>"; };
 		8941E8B328BB87E800683D66 /* lose.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = lose.wav; sourceTree = "<group>"; };
 		8941E8B528BB881700683D66 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
-		8941E8B728BB882900683D66 /* win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = win.mp3; sourceTree = "<group>"; };
+		8941E8B928BB897000683D66 /* win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = win.mp3; sourceTree = "<group>"; };
 		89490A8E28B0F5A3008F5F1C /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89490A9128B0F5A3008F5F1C /* BattleshipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipApp.swift; sourceTree = "<group>"; };
 		89490A9328B0F5A3008F5F1C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 		8941E8B028BB874100683D66 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
-				8941E8B728BB882900683D66 /* win.mp3 */,
+				8941E8B928BB897000683D66 /* win.mp3 */,
 				8941E8B328BB87E800683D66 /* lose.wav */,
 				8941E8B528BB881700683D66 /* explosion.wav */,
 				8941E8B128BB877200683D66 /* invalid.wav */,
@@ -244,7 +244,7 @@
 			files = (
 				8941E8B628BB881700683D66 /* explosion.wav in Resources */,
 				8941E8B428BB87E800683D66 /* lose.wav in Resources */,
-				8941E8B828BB882900683D66 /* win.mp3 in Resources */,
+				8941E8BA28BB897000683D66 /* win.mp3 in Resources */,
 				89490A9928B0F5A4008F5F1C /* Preview Assets.xcassets in Resources */,
 				89490A9628B0F5A4008F5F1C /* Assets.xcassets in Resources */,
 				8941E8B228BB877200683D66 /* invalid.wav in Resources */,
