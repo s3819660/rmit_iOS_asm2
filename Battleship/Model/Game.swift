@@ -55,7 +55,7 @@ final class Game: ObservableObject {
     var botMoveCombinations = [[Coordinate]]()
     
     // Difficulty level 0, 1, 2
-    var difficultyLevel = 0
+    var difficultyLevel = 2
     
     // Previous zone states
     var prevZoneStates = [[OceanZoneState]]()
@@ -310,57 +310,51 @@ final class Game: ObservableObject {
         // Bot doesn't know where my ships are
         // Random bot move
         if difficultyLevel == 0 {
-            var found = false
-            for (i, x) in self.zoneStates.enumerated() {
-                for (j, y) in x.enumerated() {
-                    // bot cannot hit their own ship
-                    let coordinates = self.fleet.ships.map {$0.compartments.map {$0.location}}
-                    location.x = i
-                    location.y = j
-                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
-//                    if (y == .myCompartment) { //bot always wins
-//                        print([i, j])
-                        location.x = i
-                        location.y = j
-                        found = true
-                        break
-                    }
-                }
-                
-                if found {
-                    break
-                }
+            let randomInt = Int.random(in: 0..<100)
+            if randomInt > 50 {
+                location = getBotNextMove()
+            } else {
+                location = getConsecutiveStep()
             }
         } else if difficultyLevel == 1 { // Bot knows where 30% of my ships are (2 ships)
-            
-//            location = getBotNextMove()
+            let randomInt = Int.random(in: 0..<100)
+            if randomInt > 35 {
+                location = getBotNextMove()
+            } else {
+                location = getConsecutiveStep()
+            }
+        } else { // Bot knows where 60% of my ships are (3.5 ships)
             location = getBotNextMove()
             while (!isBotValidMove(x: location.x, y: location.y)) {
                 location = getBotNextMove()
             }
-//            var found = false
-//            for (i, x) in self.zoneStates.enumerated() {
-//                for (j, y) in x.enumerated() {
-//                    // bot cannot hit their own ship
-//                    let coordinates = self.fleet.ships.map {$0.compartments.map {$0.location}}
-//                    location.x = i
-//                    location.y = j
-//                    if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
-////                    if (y == .myCompartment) { //bot always wins
+        }
+        
+        return location
+    }
+    
+    func getConsecutiveStep() -> Coordinate {
+        var location = Coordinate(x: 0, y: 0)
+        var found = false
+        for (i, x) in self.zoneStates.enumerated() {
+            for (j, y) in x.enumerated() {
+                // bot cannot hit their own ship
+                let coordinates = self.fleet.ships.map {$0.compartments.map {$0.location}}
+                location.x = i
+                location.y = j
+                if ((y == .clear || y == .myCompartment) && (!Array(coordinates.joined()).contains(location))) {
+//                    if (y == .myCompartment) { //bot always wins
 //                        print([i, j])
-//                        location.x = i
-//                        location.y = j
-//                        found = true
-//                        break
-//                    }
-//                }
-//
-//                if found {
-//                    break
-//                }
-//            }
-        } else { // Bot knows where 60% of my ships are (3.5 ships)
+                    location.x = i
+                    location.y = j
+                    found = true
+                    break
+                }
+            }
             
+            if found {
+                break
+            }
         }
         
         return location
@@ -425,29 +419,6 @@ final class Game: ObservableObject {
 //        print("line 360, getBotNextMoveCombination() \(lastPos)")
         return lastPos
     }
-    
-    // get adjacent move from last hit location (abundant)
-//    func getAdjacentLocation(lastHitLocation: Coordinate) -> Coordinate {
-//        var location = Coordinate(x: -1, y: -1)
-//        let lastX = lastHitLocation.x
-//        let lastY = lastHitLocation.y
-//
-//        if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-//            location.x = lastX + 1
-//            location.y = lastY
-//        } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-//            location.x = lastX - 1
-//            location.y = lastY
-//        } else if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-//            location.y = lastY + 1
-//            location.x = lastX
-//        } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-//            location.y = lastY - 1
-//            location.x = lastX
-//        }
-//
-//        return location
-//    }
     
     // check if a location is valid for bot
     func isBotValidMove(x: Int, y: Int) -> Bool {
