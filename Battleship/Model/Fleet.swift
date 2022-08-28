@@ -142,18 +142,22 @@ class Fleet: Codable {
     }
 
     /*
+    Get image based on location
     */
     func getShipImage(location: Coordinate) -> String {
         var img = ""
 
+        // get ship
         let ship = self.ships.findFirst(where: {$0.coordinates.contains(location)})
+        // get index of compartment based on ship
         let index = ship.coordinates().findFirstIndex(where: {$0.x == location.x && $0.y == location.y})
+        let numOfCompartments = ship.length
         if index == 0 {
-            return ""
+            return numOfCompartments == 2 ? "" : "" 
         } else if index == 1 {
-            return ""
+            return numOfCompartments == 2 ? "" : ""
         } else {
-            return ""
+            return numOfCompartments == 2 ? "" : ""
         }
 
         return img
