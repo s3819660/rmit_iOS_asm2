@@ -23,6 +23,8 @@ struct SettingsView: View {
             Color("BackgroundColor")
             
             Form {
+                Spacer(minLength: 20).listRowBackground(Color.clear)
+                
                 Section(header: Text("Difficulty")) {
                     Picker(
                         selection: $settings.difficultyLevel,
@@ -42,8 +44,6 @@ struct SettingsView: View {
                         default:
                             game.difficultyLevel = 0
                         }
-                        
-                        print("game diff=", game.difficultyLevel)
                     })
                     .labelsHidden()
                     .pickerStyle(.inline)
@@ -64,29 +64,11 @@ struct SettingsView: View {
                 .listRowBackground(Color.gray.opacity(0.2))
             }
         }
-        .padding(.top, 70)
         .navigationBarTitle(Text("Settings"))
         .navigationViewStyle(.stack)
         .navigationBarTitleDisplayMode(.inline)
         .edgesIgnoringSafeArea(.all)
         .font(.title2)
-        .onAppear {
-            let appearance = UINavigationBarAppearance()
-            let textColor = UIColor(.white)
-
-            appearance.backgroundColor = UIColor(Color("PrimaryColor"))
-            appearance.largeTitleTextAttributes = [
-               .foregroundColor: textColor,
-               .textEffect: NSAttributedString.TextEffectStyle.letterpressStyle
-            ]
-            appearance.titleTextAttributes = [
-               .foregroundColor: textColor,
-//               .textEffect: NSAttributedString.TextEffectStyle.letterpressStyle
-            ]
-
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        }
     }
 }
 

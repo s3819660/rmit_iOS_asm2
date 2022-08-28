@@ -55,13 +55,38 @@ struct MenuView: View {
             }
                 .edgesIgnoringSafeArea(.all)
                 .onAppear {
+                    // Fetch leaderboard
                     game.fetchLeaderboard()
+                    
+                    // Initialize Navigation Bar style
+                    initNavigationBarStyle()
                 }
         }
             // fix NSLayoutContraints warnings
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarHidden(true) // hide navigation from Log In page
             .accentColor(Color("TextColor"))
+    }
+    
+    /*
+     Initialize Navigation Bar style
+     */
+    func initNavigationBarStyle() {
+        let appearance = UINavigationBarAppearance()
+        let textColor = UIColor(.white)
+
+        appearance.backgroundColor = UIColor(Color("PrimaryColor"))
+        appearance.largeTitleTextAttributes = [
+           .foregroundColor: textColor,
+           .textEffect: NSAttributedString.TextEffectStyle.letterpressStyle
+        ]
+        appearance.titleTextAttributes = [
+           .foregroundColor: textColor,
+//               .textEffect: NSAttributedString.TextEffectStyle.letterpressStyle
+        ]
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
 }
 
