@@ -30,8 +30,10 @@ struct OceanView: View {
                     let y = index / Game.numRows
                     let x = index - (y * Game.numCols)
                     let location = Coordinate(x: x, y: y)
-                    OceanZoneView(state: $game.zoneStates[x][y])
-                        .frame(height: geo.size.height/CGFloat(Game.numRows))
+                    OceanZoneView(state: $game.zoneStates[x][y], image: game.fleet2.getShipImage(location: Coordinate(x: x, y: y)))
+//                        .frame(height: geo.size.height/CGFloat(Game.numRows))
+                    // comment the line below to disable square ocean view
+                        .frame(height: min(geo.size.height/CGFloat(Game.numRows), geo.size.width/CGFloat(Game.numCols)))
                         .onTapGesture {
                             // if my turn
                             if (game.isMyTurn) {
@@ -41,8 +43,14 @@ struct OceanView: View {
 
                 }
             }
+            // comment the 3 lines below to disable square ocean view
+            .frame(width: min(geo.size.width, geo.size.height))
+            .frame(maxHeight: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .onDisappear(perform: saveStateToFirestore)
+        
+//        Spacer(minLength: 20)
     }
     
     func saveStateToFirestore() {

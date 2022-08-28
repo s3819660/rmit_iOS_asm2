@@ -25,6 +25,7 @@ struct GameView: View {
         .onAppear(perform: handleResumeGame)
         // Hide navigation bar
         .navigationBarHidden(true)
+        .background(Color("BackgroundColor"))
     }
     
     func handleResumeGame() {

@@ -46,12 +46,7 @@ final class Game: ObservableObject {
     
     // Bot's last hits
     var botLastHits = [Coordinate]()
-    var botLastHitShips:[(name: String, length: Int)] = [("PT Boat", 2),
-                                                         ("Submarine", 3),
-                                                         ("Destroyer", 3),
-                                                         ("Battleship", 2),
-                                                         ("Aircraft Carrier", 2)]
-    var botLastHitShips2:[(name: String, coordinates: [Coordinate])] = [("PT Boat", [Coordinate]()),
+    var botLastHitShips:[(name: String, coordinates: [Coordinate])] = [("PT Boat", [Coordinate]()),
                                                           ("Submarine", [Coordinate]()),
                                                           ("Destroyer", [Coordinate]()),
                                                           ("Battleship", [Coordinate]()),
@@ -76,9 +71,6 @@ final class Game: ObservableObject {
         
         // load prev zone states
         fetchStateFromFirestore()
-        
-        // Fetch leaderboard
-        fetchLeaderboard()
     }
     
     /*
@@ -156,6 +148,7 @@ final class Game: ObservableObject {
 
                 // Update my score
                 self.myScore = score
+//                print("line 151 myscore", self.myScore)
             } else {
                 self.prevZoneStates = [[OceanZoneState]]()
                 print("Document does not exist")
@@ -172,6 +165,9 @@ final class Game: ObservableObject {
                     if let err = err {
                         print("Error getting documents: \(err)")
                     } else {
+                        // Clear leaderboard
+                        self.leaderboard.removeAll()
+                        
                         for document in querySnapshot!.documents {
 //                            print("\(document.documentID) => \(document.data())")
                             guard let score = document.get("score") as? Int else {
@@ -180,9 +176,7 @@ final class Game: ObservableObject {
                             }
                             
 //                            print("document name \(document.documentID), score=\(score)")
-                            self.leaderboard.removeAll()
                             self.leaderboard.append(User(id: self.leaderboard.count, username: document.documentID, score: score))
-                            print("leaderboard", self.leaderboard)
                         }
                     }
             }
@@ -197,6 +191,11 @@ final class Game: ObservableObject {
             return
         }
         leaderboard[userIndex].score = score
+        
+        let sortedUsers = leaderboard.sorted {
+            $0.score > $1.score
+        }
+        leaderboard = sortedUsers
     }
     
     func jsonToFleet(jsonStr: String) -> Fleet {
@@ -274,12 +273,7 @@ final class Game: ObservableObject {
                 // find all coordinates of ship and append to botLastHitShip
                 // after sunking a ship, clear botLastHitShip
                 self.botLastHits.append(location)
-                // Get index of hitShip in botLastHitShips
-                guard let hitShipIndex = self.botLastHitShips.firstIndex(where: {$0.name == hitShip.name}) else {
-                    return
-                }
                 // Update botLastHitShips
-                self.botLastHitShips[hitShipIndex].length -= 1
                 self.updateBotLastHitShips(shipName: hitShip.name, location: location)
 
                 if hitShip.isSunk() {
@@ -340,9 +334,9 @@ final class Game: ObservableObject {
         } else if difficultyLevel == 1 { // Bot knows where 30% of my ships are (2 ships)
             
 //            location = getBotNextMove()
-            location = getBotNextMoveCombination()
+            location = getBotNextMove()
             while (!isBotValidMove(x: location.x, y: location.y)) {
-                location = getBotNextMoveCombination()
+                location = getBotNextMove()
             }
 //            var found = false
 //            for (i, x) in self.zoneStates.enumerated() {
@@ -380,7 +374,7 @@ final class Game: ObservableObject {
      => use botLastHitShips2 to fix
      */
     // Get bot next move (skipping)
-    func getBotNextMove() -> Coordinate {
+    func getNextStep() -> Coordinate {
         var location = Coordinate(x: 0, y: 0)
         // if bot just hit
         // search for adjacent locations
@@ -413,7 +407,7 @@ final class Game: ObservableObject {
     }
     
     // Get bot next move (based on combinations)
-    func getBotNextMoveCombination() -> Coordinate {
+    func getBotNextMove() -> Coordinate {
         if !botMoveCombinations.isEmpty {
             let lastCombIndex = botMoveCombinations.count - 1
             let lastCombination = botMoveCombinations[lastCombIndex]
@@ -427,33 +421,33 @@ final class Game: ObservableObject {
 //            print("line 363, getBotNextMoveCombination() \(lastPos)")
             return lastPos
         }
-        let lastPos = getBotNextMove()
+        let lastPos = getNextStep()
 //        print("line 360, getBotNextMoveCombination() \(lastPos)")
         return lastPos
     }
     
-    // get adjacent move from last hit location
-    func getAdjacentLocation(lastHitLocation: Coordinate) -> Coordinate {
-        var location = Coordinate(x: -1, y: -1)
-        let lastX = lastHitLocation.x
-        let lastY = lastHitLocation.y
-        
-        if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
-            location.x = lastX + 1
-            location.y = lastY
-        } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
-            location.x = lastX - 1
-            location.y = lastY
-        } else if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
-            location.y = lastY + 1
-            location.x = lastX
-        } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
-            location.y = lastY - 1
-            location.x = lastX
-        }
-        
-        return location
-    }
+    // get adjacent move from last hit location (abundant)
+//    func getAdjacentLocation(lastHitLocation: Coordinate) -> Coordinate {
+//        var location = Coordinate(x: -1, y: -1)
+//        let lastX = lastHitLocation.x
+//        let lastY = lastHitLocation.y
+//
+//        if (lastX + 1 < Game.numCols && isBotValidMove(x: lastX + 1, y: lastY)) {
+//            location.x = lastX + 1
+//            location.y = lastY
+//        } else if (lastX > 0 && isBotValidMove(x: lastX - 1, y: lastY)) {
+//            location.x = lastX - 1
+//            location.y = lastY
+//        } else if (lastY + 1 < Game.numRows && isBotValidMove(x: lastX, y: lastY + 1)) {
+//            location.y = lastY + 1
+//            location.x = lastX
+//        } else if (lastY > 0 && isBotValidMove(x: lastX, y: lastY - 1)) {
+//            location.y = lastY - 1
+//            location.x = lastX
+//        }
+//
+//        return location
+//    }
     
     // check if a location is valid for bot
     func isBotValidMove(x: Int, y: Int) -> Bool {
@@ -467,9 +461,9 @@ final class Game: ObservableObject {
      */
     func resetBotLastHitShips() {
         for (i, x) in fleet2.ships.enumerated() {
-            botLastHitShips2[i].coordinates.removeAll()
+            botLastHitShips[i].coordinates.removeAll()
             for _ in x.coordinates() {
-                botLastHitShips2[i].coordinates.append(Coordinate(x: -1, y: -1))
+                botLastHitShips[i].coordinates.append(Coordinate(x: -1, y: -1))
             }
         }
         
@@ -481,9 +475,9 @@ final class Game: ObservableObject {
      to keep track of hit coordinates
      */
     func updateBotLastHitShips(shipName: String, location: Coordinate) {
-        if let i = botLastHitShips2.firstIndex(where: {$0.name == shipName}) {
-            if let j = botLastHitShips2[i].coordinates.firstIndex(where: {$0.x == -1}) {
-                botLastHitShips2[i].coordinates[j] = location
+        if let i = botLastHitShips.firstIndex(where: {$0.name == shipName}) {
+            if let j = botLastHitShips[i].coordinates.firstIndex(where: {$0.x == -1}) {
+                botLastHitShips[i].coordinates[j] = location
             } else {
                 print("Cannot find empty coordinate at \(shipName) in botLastHitShips")
             }

@@ -54,6 +54,9 @@ struct MenuView: View {
                     .navigationBarHidden(true)
             }
                 .edgesIgnoringSafeArea(.all)
+                .onAppear {
+                    game.fetchLeaderboard()
+                }
         }
             // fix NSLayoutContraints warnings
             .navigationViewStyle(StackNavigationViewStyle())
