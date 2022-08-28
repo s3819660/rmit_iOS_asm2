@@ -18,18 +18,36 @@ struct ToolbarView: View {
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
-        HStack {
-            Button(action: reset) {Image(systemName: "repeat")}
-                .help("Start a new game.")
-                .foregroundColor(.accentColor)
-                .padding(.leading, 10)
-            Spacer()
-            Text(game.message)
-            Spacer()
-            Button(action: backToMenu) {Image(systemName: "stop")}
-                .foregroundColor(.accentColor)
-                .padding(.leading, 10)
-        }.frame(height: 50)
+        GeometryReader { geo in
+            HStack {
+                Button(action: reset) {
+                    Image(systemName: "repeat.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: (geo.size.width > 700) ? 45 : 30, height: (geo.size.width > 700) ? 45 : 30)
+                }
+                    .help("Start a new game.")
+                    .foregroundColor(.accentColor)
+                    .padding(.top, 20)
+                Spacer()
+                Text(game.message)
+                Spacer()
+                Button(action: backToMenu) {
+                    Image(systemName: "stop.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: (geo.size.width > 700) ? 45 : 30, height: (geo.size.width > 700) ? 45 : 30)
+                }
+                    .foregroundColor(.accentColor)
+                    .padding(.leading, 10)
+                    .padding(.top, 20)
+            }
+            .onAppear {
+                print("wdith \(geo.size.width)")
+            }
+        }
+        .frame(height: 50)
+        .padding(.horizontal, 20)
     }
     
     func reset() {

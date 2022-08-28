@@ -23,7 +23,7 @@ struct SettingsView: View {
             Color("BackgroundColor")
             
             Form {
-                Spacer(minLength: 20).listRowBackground(Color.clear)
+                Spacer(minLength: 2).listRowBackground(Color.clear)
                 
                 Section(header: Text("Difficulty")) {
                     Picker(
@@ -37,9 +37,9 @@ struct SettingsView: View {
                     // handle difficulty changed
                     .onChange(of: settings.difficultyLevel, perform: { (value) in
                         switch value {
-                        case .moderate:
+                        case .Moderate:
                             game.difficultyLevel = 1
-                        case .hard:
+                        case .Hard:
                             game.difficultyLevel = 2
                         default:
                             game.difficultyLevel = 0
@@ -52,13 +52,13 @@ struct SettingsView: View {
 
                 Section(header: Text("Sound")) {
                     Toggle(isOn: $settings.isSoundOn) {
-                        Text("Sound on:")
+                        Text("Sound on")
                     }
                 }
                 .listRowBackground(Color.gray.opacity(0.2))
                 Section(header: Text("Theme")) {
                     Toggle(isOn: $settings.isDarkMode) {
-                        Text("Dark mode:")
+                        Text("Dark mode")
                     }
                 }
                 .listRowBackground(Color.gray.opacity(0.2))

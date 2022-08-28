@@ -31,7 +31,7 @@ final class SettingsStore: ObservableObject {
 
         defaults.register(defaults: [
             Keys.isSoundOn: true,
-            Keys.difficultyLevel: DifficultyLevel.moderate.rawValue
+            Keys.difficultyLevel: DifficultyLevel.Moderate.rawValue
             ])
 
         cancellable = NotificationCenter.default
@@ -51,15 +51,15 @@ final class SettingsStore: ObservableObject {
     }
 
     enum DifficultyLevel: String, CaseIterable {
-        case easy
-        case moderate
-        case hard
+        case Easy
+        case Moderate
+        case Hard
     }
 
     var difficultyLevel: DifficultyLevel {
         get {
             return defaults.string(forKey: Keys.difficultyLevel)
-                .flatMap { DifficultyLevel(rawValue: $0) } ?? .moderate
+                .flatMap { DifficultyLevel(rawValue: $0) } ?? .Moderate
         }
 
         set {
