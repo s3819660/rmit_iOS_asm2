@@ -37,7 +37,9 @@ struct LeaderboardView: View {
                     }
                 }
             }
+                .navigationViewStyle(.stack)
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
+                .padding(.top, 55)
                 .onAppear {
                     // Play background music
                     if game.isSoundOn {
@@ -47,7 +49,7 @@ struct LeaderboardView: View {
                 .onDisappear {
                     stopBackgroundAudio()
                 }
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 

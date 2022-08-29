@@ -16,6 +16,7 @@ import SwiftUI
 struct ToolbarView: View {
     @EnvironmentObject var game: Game
     @Environment(\.presentationMode) var presentation
+    @State private var animatingButton = false
     
     var body: some View {
         GeometryReader { geo in
@@ -29,6 +30,8 @@ struct ToolbarView: View {
                     .help("Start a new game.")
                     .foregroundColor(.accentColor)
                     .padding(.top, 20)
+                    .rotationEffect(.degrees(self.animatingButton ? 360 : 0))
+                    .animation(.easeInOut(duration: 1), value: self.animatingButton)
                 Spacer()
                 Text(game.message)
                 Spacer()
@@ -41,10 +44,17 @@ struct ToolbarView: View {
                     .foregroundColor(.accentColor)
                     .padding(.leading, 10)
                     .padding(.top, 20)
+                    .rotationEffect(.degrees(self.animatingButton ? 360 : 0))
+                    .animation(.easeInOut(duration: 1), value: self.animatingButton)
             }
         }
         .frame(height: 50)
         .padding(.horizontal, 20)
+        .onChange(of: game.over, perform: { (value) in
+            if value {
+                animatingButton = true
+            }
+        })
     }
     
     func reset() {
@@ -54,6 +64,13 @@ struct ToolbarView: View {
     func backToMenu() {
         game.prevZoneStates = game.zoneStates
         self.presentation.wrappedValue.dismiss()
+    }
+}
+
+extension Animation {
+    static func ripple() -> Animation {
+        Animation.spring(dampingFraction: 0.5)
+            .speed(2)
     }
 }
 

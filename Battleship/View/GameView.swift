@@ -40,6 +40,8 @@ struct GameView: View {
         // Play background music
         if game.isSoundOn {
             playBackgroundAudio(sound: "game", type: "mp3")
+        } else {
+            stopBackgroundAudio()
         }
     }
     
