@@ -74,7 +74,8 @@ struct LeaderCard: View {
                     Text("\(rank + 1)")
                         .font(.title)
                         .bold()
-                        .padding(.trailing, 10)
+                        .padding(.leading, 10)
+                        .frame(width: 45, height: geo.size.height * 5)
                 }
 
                 if (geo.size.width > 450) {

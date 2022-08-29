@@ -33,14 +33,13 @@ struct SignUpView: View {
                                 .autocapitalization(.none)
                                 .padding()
                                 .background(Color("InputBackgroundColor"))
-                                .border(Color("SecondaryColor"), width: 3)
 
                             SecureField("Password", text: $password)
                                 .padding()
                                 .background(Color("InputBackgroundColor"))
     //                                    .padding(.bottom, 10)
                             Text(errorMessage)
-                                .foregroundColor(.red)
+                                .foregroundColor(Color("AccentColor"))
                                 .opacity(errorMessage.isEmpty ? 0 : 1)
                                 .frame(height: 30)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,10 +81,12 @@ struct SignUpView: View {
                     }
                 }
                 .edgesIgnoringSafeArea(.all)
+                .navigationBarHidden(true)
             }
-            .navigationBarHidden(true)
             .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarHidden(true)
         }
+        .navigationBarHidden(true)
     }
     
     /*

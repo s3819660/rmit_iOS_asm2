@@ -27,16 +27,16 @@ struct MenuView: View {
                     VStack {
                         Image("battleship_ic")
                             .resizable()
-                            .frame(width: 250, height: 250)
+                            .frame(width: (geo.size.height > 500) ? 250 : 100, height: (geo.size.height > 500) ? 250 : 100)
                             .border(Color("AppIconBorderColor"), width: 4)
-                            .padding(.bottom, 30)
+                            .padding(.bottom, (geo.size.height > 500) ? 30 : 8)
                         
                         NavigationLink(destination: GameView(isNewGame: false)) {
                             Text("Resume")
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
                                 .background(Color("AccentColor"))
                         }
                             // hide Resume button if it is a new user
@@ -50,7 +50,7 @@ struct MenuView: View {
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
                                 .background(Color("AccentColor"))
                         }
                         NavigationLink(destination: LeaderboardView()) {
@@ -58,7 +58,15 @@ struct MenuView: View {
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
+                                .background(Color("AccentColor"))
+                        }
+                        NavigationLink(destination: AchievementsView()) {
+                            Text("Achievements")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
                                 .background(Color("AccentColor"))
                         }
                         NavigationLink(destination: SettingsView()) {
@@ -66,7 +74,7 @@ struct MenuView: View {
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
                                 .background(Color("AccentColor"))
                         }
                         NavigationLink(destination: HowToPlayView()) {
@@ -74,7 +82,7 @@ struct MenuView: View {
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 60)
+                                .frame(height: (geo.size.height > 500) ? 60 : 35)
                                 .background(Color("AccentColor"))
                         }
     //                    Text("Log Out")

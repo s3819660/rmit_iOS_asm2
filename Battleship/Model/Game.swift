@@ -117,6 +117,16 @@ final class Game: ObservableObject {
                 guard let state = document.get("state") as? String else {
                     print("Cannot parse Game state from document")
                     self.prevZoneStates = [[OceanZoneState]]()
+                    
+                    // Can have score even when do not have state
+                    guard let score = document.get("score") as? Int else {
+                        print("line 141 Cannot parse Score from document")
+                        self.myScore = 0
+                        return
+                    }
+
+                    // Update my score
+                    self.myScore = score
                     return
                 }
 //                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
