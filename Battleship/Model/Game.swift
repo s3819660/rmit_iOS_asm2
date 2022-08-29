@@ -44,6 +44,10 @@ final class Game: ObservableObject {
     var myScore = 0
     var leaderboard = [User]()
     
+    // Settings
+    var isSoundOn = true
+    var isLoggedOut = false
+    
     // Bot's last hits
     var botLastHits = [Coordinate]()
     var botLastHitShips:[(name: String, coordinates: [Coordinate])] = [("PT Boat", [Coordinate]()),

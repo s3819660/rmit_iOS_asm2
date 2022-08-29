@@ -19,53 +19,98 @@ struct MenuView: View {
 //    @State var isResumeHidden = true // should be true for new user
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color("BackgroundColor")
-                
-                VStack {
-                    NavigationLink(destination: GameView(isNewGame: false)) {
-                        Text("Resume")
-                    }
-                        // hide Resume button if it is a new user
-                        .opacity((game.prevZoneStates.isEmpty) ? 0 : 1)
-//                        .onDisappear {
-//                            // (Workaround) unhide Resume button for when new user creates a new game then go back to menu
-//                            self.isResumeHidden = false
-//                        }
-                    NavigationLink(destination: GameView()) {
-                        Text("New game")
-                    }
-                    NavigationLink(destination: LeaderboardView()) {
-                        Text("Leaderboard")
-                    }
-                    NavigationLink(destination: SettingsView()) {
-                        Text("Settings")
-                    }
-                    NavigationLink(destination: HowToPlayView()) {
-                        Text("How to play")
-                    }
-                    Text("Log Out")
-                        .onTapGesture {
-                            self.presentation.wrappedValue.dismiss()
-                        }
-                }
-                    .navigationBarTitle("", displayMode: .inline)
-                    .navigationBarHidden(true)
-            }
-                .edgesIgnoringSafeArea(.all)
-                .onAppear {
-                    // Fetch leaderboard
-                    game.fetchLeaderboard()
+        GeometryReader { geo in
+            NavigationView {
+                ZStack {
+                    Color("BackgroundColor")
                     
-                    // Initialize Navigation Bar style
-                    initNavigationBarStyle()
+                    VStack {
+                        Image("battleship_ic")
+                            .resizable()
+                            .frame(width: 250, height: 250)
+                            .border(Color("AppIconBorderColor"), width: 4)
+                            .padding(.bottom, 30)
+                        
+                        NavigationLink(destination: GameView(isNewGame: false)) {
+                            Text("Resume")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color("AccentColor"))
+                        }
+                            // hide Resume button if it is a new user
+                            .opacity((game.prevZoneStates.isEmpty) ? 0 : 1)
+    //                        .onDisappear {
+    //                            // (Workaround) unhide Resume button for when new user creates a new game then go back to menu
+    //                            self.isResumeHidden = false
+    //                        }
+                        NavigationLink(destination: GameView()) {
+                            Text("New game")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color("AccentColor"))
+                        }
+                        NavigationLink(destination: LeaderboardView()) {
+                            Text("Leaderboard")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color("AccentColor"))
+                        }
+                        NavigationLink(destination: SettingsView()) {
+                            Text("Settings")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color("AccentColor"))
+                        }
+                        NavigationLink(destination: HowToPlayView()) {
+                            Text("How to play")
+                                .bold()
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color("AccentColor"))
+                        }
+    //                    Text("Log Out")
+    //                        .onTapGesture {
+    //                            self.presentation.wrappedValue.dismiss()
+    //                        }
+                    }
+                        .frame(maxWidth: geo.size.width > 700 ? 350 : 250)
+                        .padding(20)
+                        .navigationBarTitle("", displayMode: .inline)
+                        .navigationBarHidden(true)
                 }
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear {
+                        // Fetch leaderboard
+                        game.fetchLeaderboard()
+                        
+                        // Initialize Navigation Bar style
+                        initNavigationBarStyle()
+                        
+                        // Play background music
+                        if game.isSoundOn {
+                            playBackgroundAudio(sound: "menu", type: "mp3")
+                        }
+                        
+                        // if log out
+                         if game.isLoggedOut {
+                             self.presentation.wrappedValue.dismiss()
+                         }
+                    }
+            }
+                // fix NSLayoutContraints warnings
+                .navigationViewStyle(StackNavigationViewStyle())
+                .navigationBarHidden(true) // hide navigation from Log In page
+                .accentColor(Color("TextColor"))
         }
-            // fix NSLayoutContraints warnings
-            .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarHidden(true) // hide navigation from Log In page
-            .accentColor(Color("TextColor"))
     }
     
     /*

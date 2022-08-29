@@ -37,8 +37,19 @@ struct LeaderboardView: View {
                     }
                 }
             }
+                .navigationViewStyle(.stack)
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
-        }
+                .padding(.top, 55)
+                .onAppear {
+                    // Play background music
+                    if game.isSoundOn {
+                        playBackgroundAudio(sound: "achievements", type: "mp3")
+                    }
+                }
+                .onDisappear {
+                    stopBackgroundAudio()
+                }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 

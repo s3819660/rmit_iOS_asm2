@@ -36,6 +36,17 @@ struct GameView: View {
             // if not reset to new game
             game.reset()
         }
+        
+        // Play background music
+        if game.isSoundOn {
+            playBackgroundAudio(sound: "game", type: "mp3")
+        } else {
+            stopBackgroundAudio()
+        }
+    }
+    
+    func handleStopGame() {
+        stopBackgroundAudio()
     }
 }
 

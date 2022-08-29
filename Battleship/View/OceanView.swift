@@ -22,6 +22,7 @@ struct OceanView: View {
     @EnvironmentObject var game: Game
     let range = (0..<(Game.numCols * Game.numRows))
     let columns = [GridItem](repeating: GridItem(.flexible(), spacing: 0), count: Game.numCols)
+    @State private var animatingOceanView = false
     
     var body: some View {
         GeometryReader {geo in
@@ -47,6 +48,11 @@ struct OceanView: View {
             .frame(width: min(geo.size.width, geo.size.height))
             .frame(maxHeight: .infinity, alignment: .center)
             .frame(maxWidth: .infinity, alignment: .center)
+            .rotationEffect(.degrees(self.animatingOceanView ? 360 : 0))
+            .animation(.easeInOut(duration: 0.5), value: self.animatingOceanView)
+            .onAppear {
+                self.animatingOceanView = true
+            }
         }
         .onDisappear(perform: saveStateToFirestore)
         
