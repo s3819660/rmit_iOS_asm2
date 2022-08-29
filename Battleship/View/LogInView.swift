@@ -10,8 +10,8 @@ import SwiftUI
 struct LogInView: View {
     @EnvironmentObject var game: Game
     
-    @State var username: String = ""
-    @State var password: String = ""
+    @State var username: String = "nhu"
+    @State var password: String = "1234"
     @State var errorMessage = ""
     @State var isSignUpLinkActive = false
     @State var isLoggedIn = false
@@ -21,7 +21,7 @@ struct LogInView: View {
         GeometryReader { geo in
             NavigationView {
                 ZStack {
-                    Color("BackgroundColor")
+                    Color("LogInBackgroundColor")
                     
                     VStack {
                         Text("Welcome back, commander!")
@@ -32,11 +32,11 @@ struct LogInView: View {
                             TextField("Username", text: $username)
                                 .autocapitalization(.none)
                                 .padding()
-                                .background(.gray.opacity(0.2))
+                                .background(Color("InputBackgroundColor"))
 
                             SecureField("Password", text: $password)
                                 .padding()
-                                .background(.gray.opacity(0.2))
+                                .background(Color("InputBackgroundColor"))
 //                                    .padding(.bottom, 10)
                             Text(errorMessage)
                                 .foregroundColor(.red)
@@ -124,10 +124,14 @@ struct LogInView: View {
                     
                     // Set is logged out
                     game.isLoggedOut = false
+                } else {
+                    errorMessage = "Invalid password! Please enter again."
+                    return
                 }
             } else {
                 print("User does not exist")
                 errorMessage = "Username does not exist!"
+                return
             }
         }
     }
@@ -138,7 +142,7 @@ struct LogInView: View {
     func isInputValid(username: String, pwd: String) -> Bool {
         var isValid = true
         if (username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || password.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
-            errorMessage = "Username and password cannot be empty!"
+            errorMessage = "Input cannot be empty!"
             isValid = false
         }
         
