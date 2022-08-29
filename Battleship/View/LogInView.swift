@@ -98,6 +98,7 @@ struct LogInView: View {
                     .padding(.horizontal, 20)
                 }
                 .edgesIgnoringSafeArea(.all)
+                .navigationBarHidden(true)
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .edgesIgnoringSafeArea(.all)
