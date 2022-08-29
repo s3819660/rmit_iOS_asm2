@@ -39,7 +39,7 @@ struct SignUpView: View {
                                 .background(Color("InputBackgroundColor"))
     //                                    .padding(.bottom, 10)
                             Text(errorMessage)
-                                .foregroundColor(.red)
+                                .foregroundColor(Color("AccentColor"))
                                 .opacity(errorMessage.isEmpty ? 0 : 1)
                                 .frame(height: 30)
                                 .frame(maxWidth: .infinity, alignment: .leading)

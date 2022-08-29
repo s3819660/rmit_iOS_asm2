@@ -39,7 +39,7 @@ struct LogInView: View {
                                 .background(Color("InputBackgroundColor"))
 //                                    .padding(.bottom, 10)
                             Text(errorMessage)
-                                .foregroundColor(.red)
+                                .foregroundColor(Color("AccentColor"))
                                 .opacity(errorMessage.isEmpty ? 0 : 1)
                                 .frame(height: 30)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -77,6 +77,9 @@ struct LogInView: View {
                             NavigationLink(destination: SignUpView(), isActive: $isSignUpLinkActive) {
                                 Button(action: {
                                     self.isSignUpLinkActive = true
+                                    
+                                    // fix keep coming back to login after signing up succeeded
+                                    game.isNavigatedBack = false
                                 }) {
                                     HStack {
                                         Spacer()

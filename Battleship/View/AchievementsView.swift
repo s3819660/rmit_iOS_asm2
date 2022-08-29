@@ -18,15 +18,23 @@ struct AchievementsView: View {
                 Spacer(minLength: 20)
                 
                 VStack {
-                    ForEach(1...game.myScore, id: \.self) { i in
-                        if (i == 1 || i == 3 || i == 5 || i == 10 || i == 20 || i == 50 || i == 100) {
-                            AchievementCard(
-                                       medalImage: "trophy_\(i)",
-                                       rank: i)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 30)
-                                        .padding(.horizontal, 10)
+                    if (game.myScore > 0) {
+                        ForEach(1...game.myScore, id: \.self) { i in
+                            if (i == 1 || i == 3 || i == 5 || i == 10 || i == 20 || i == 50 || i == 100) {
+                                AchievementCard(
+                                           medalImage: "trophy_\(i)",
+                                           rank: i)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 30)
+                                            .padding(.horizontal, 10)
+                            }
                         }
+                    } else {
+                        Text("You have no achievements!")
+                            .font(.title2)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 30)
+                            .padding(.horizontal, 10)
                     }
                 }
             }
