@@ -316,17 +316,18 @@ final class Game: ObservableObject {
     func generateBotMove() -> Coordinate {
         var location = Coordinate(x: 0, y: 0)
         
-        // Bot doesn't know where my ships are
-        // Random bot move
-        if ((difficultyLevel < 2) && (Int.random(in: 0..<100) <= (difficultyLevel == 0 ? 50 : 35))) {
-            location = getConsecutiveStep()
-        } else { 
-            location = getBotNextMove()
-            while (!isBotValidMove(x: location.x, y: location.y)) {
+        while (!isBotValidMove(x: location.x, y: location.y)) {
+            // Bot doesn't know where my ships are
+            // Random bot move
+            if ((difficultyLevel < 2) && (Int.random(in: 0..<100) <= (difficultyLevel == 0 ? 50 : 35))) {
+                location = getConsecutiveStep()
+            } else {
                 location = getBotNextMove()
+//                while (!isBotValidMove(x: location.x, y: location.y)) {
+//                    location = getBotNextMove()
+//                }
             }
         }
-        
         return location
     }
     
