@@ -92,6 +92,9 @@ struct LogInView: View {
                     game.fetchStateFromFirestore()
                     game.reset()
                     self.isLoggedIn = true
+                    
+                    // Set is logged out
+                    game.isLoggedOut = false
                 }
             } else {
                 print("User does not exist")

@@ -45,10 +45,10 @@ struct MenuView: View {
                     NavigationLink(destination: HowToPlayView()) {
                         Text("How to play")
                     }
-                    Text("Log Out")
-                        .onTapGesture {
-                            self.presentation.wrappedValue.dismiss()
-                        }
+//                    Text("Log Out")
+//                        .onTapGesture {
+//                            self.presentation.wrappedValue.dismiss()
+//                        }
                 }
                     .navigationBarTitle("", displayMode: .inline)
                     .navigationBarHidden(true)
@@ -60,6 +60,16 @@ struct MenuView: View {
                     
                     // Initialize Navigation Bar style
                     initNavigationBarStyle()
+                    
+                    // Play background music
+                    if game.isSoundOn {
+                        playBackgroundAudio(sound: "menu", type: "mp3")
+                    }
+                    
+                    // if log out
+                     if game.isLoggedOut {
+                         self.presentation.wrappedValue.dismiss()
+                     }
                 }
         }
             // fix NSLayoutContraints warnings

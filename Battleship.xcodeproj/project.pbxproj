@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89073A4A28BC522500FF83FC /* menu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 89073A4928BC522500FF83FC /* menu.mp3 */; };
+		89073A4C28BC525B00FF83FC /* achievements.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 89073A4B28BC525B00FF83FC /* achievements.mp3 */; };
+		89073A4E28BC528600FF83FC /* game.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 89073A4D28BC528600FF83FC /* game.mp3 */; };
 		8941E8AA28BB353200683D66 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8941E8A928BB353200683D66 /* SettingsStore.swift */; };
 		8941E8AF28BB871C00683D66 /* PlaySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8941E8AE28BB871C00683D66 /* PlaySound.swift */; };
 		8941E8B228BB877200683D66 /* invalid.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8941E8B128BB877200683D66 /* invalid.wav */; };
@@ -40,6 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		89073A4928BC522500FF83FC /* menu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = menu.mp3; sourceTree = "<group>"; };
+		89073A4B28BC525B00FF83FC /* achievements.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = achievements.mp3; sourceTree = "<group>"; };
+		89073A4D28BC528600FF83FC /* game.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = game.mp3; sourceTree = "<group>"; };
 		8941E8A928BB353200683D66 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		8941E8AE28BB871C00683D66 /* PlaySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySound.swift; sourceTree = "<group>"; };
 		8941E8B128BB877200683D66 /* invalid.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = invalid.wav; sourceTree = "<group>"; };
@@ -96,6 +102,9 @@
 		8941E8B028BB874100683D66 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				89073A4D28BC528600FF83FC /* game.mp3 */,
+				89073A4B28BC525B00FF83FC /* achievements.mp3 */,
+				89073A4928BC522500FF83FC /* menu.mp3 */,
 				8941E8B928BB897000683D66 /* win.mp3 */,
 				8941E8B328BB87E800683D66 /* lose.wav */,
 				8941E8B528BB881700683D66 /* explosion.wav */,
@@ -245,7 +254,10 @@
 				8941E8B628BB881700683D66 /* explosion.wav in Resources */,
 				8941E8B428BB87E800683D66 /* lose.wav in Resources */,
 				8941E8BA28BB897000683D66 /* win.mp3 in Resources */,
+				89073A4C28BC525B00FF83FC /* achievements.mp3 in Resources */,
+				89073A4A28BC522500FF83FC /* menu.mp3 in Resources */,
 				89490A9928B0F5A4008F5F1C /* Preview Assets.xcassets in Resources */,
+				89073A4E28BC528600FF83FC /* game.mp3 in Resources */,
 				89490A9628B0F5A4008F5F1C /* Assets.xcassets in Resources */,
 				8941E8B228BB877200683D66 /* invalid.wav in Resources */,
 				898B6E3228B1F5A600957F56 /* GoogleService-Info.plist in Resources */,

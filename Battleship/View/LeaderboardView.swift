@@ -38,6 +38,15 @@ struct LeaderboardView: View {
                 }
             }
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
+                .onAppear {
+                    // Play background music
+                    if game.isSoundOn {
+                        playBackgroundAudio(sound: "achievements", type: "mp3")
+                    }
+                }
+                .onDisappear {
+                    stopBackgroundAudio()
+                }
         }
     }
 }

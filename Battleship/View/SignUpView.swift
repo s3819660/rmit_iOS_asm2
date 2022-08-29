@@ -89,6 +89,9 @@ struct SignUpView: View {
                
                // For when user logs out after signing up
                game.isNavigatedBack = true
+               
+               // Set is logged out
+               game.isLoggedOut = false
            }
        }
    }

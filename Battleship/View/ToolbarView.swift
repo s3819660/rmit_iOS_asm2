@@ -42,9 +42,6 @@ struct ToolbarView: View {
                     .padding(.leading, 10)
                     .padding(.top, 20)
             }
-            .onAppear {
-                print("wdith \(geo.size.width)")
-            }
         }
         .frame(height: 50)
         .padding(.horizontal, 20)
