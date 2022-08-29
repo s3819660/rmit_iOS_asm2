@@ -27,7 +27,7 @@ func playBackgroundAudio(sound: String, type: String) {
              backgroundAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
              // backgroundAudioPlayer.currentTime = 0
              // infinite loop
-//             backgroundAudioPlayer?.numberOfLoops =  -1
+             backgroundAudioPlayer?.numberOfLoops =  -1
              backgroundAudioPlayer?.play()
          } catch {
              print("ERROR: Could not find and play the sound file!")

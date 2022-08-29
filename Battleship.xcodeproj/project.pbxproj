@@ -37,6 +37,7 @@
 		89761C8128BB2A52006CFE6F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89761C8028BB2A52006CFE6F /* SettingsView.swift */; };
 		898B6E3028B1ED4200957F56 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 898B6E2F28B1ED4200957F56 /* FirebaseFirestore */; };
 		898B6E3228B1F5A600957F56 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 898B6E3128B1F5A600957F56 /* GoogleService-Info.plist */; };
+		89BA170428BCE8740098DE32 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BA170328BCE8740098DE32 /* AchievementsView.swift */; };
 		89F2EC5F28B755BA0049C5FD /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F2EC5E28B755BA0049C5FD /* LogInView.swift */; };
 		89F2EC6128B759200049C5FD /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F2EC6028B759200049C5FD /* SignUpView.swift */; };
 		89F2EC6328B79F580049C5FD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F2EC6228B79F580049C5FD /* User.swift */; };
@@ -74,6 +75,7 @@
 		89761C8028BB2A52006CFE6F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		89761C8228BB2EFA006CFE6F /* Battleship.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Battleship.entitlements; sourceTree = "<group>"; };
 		898B6E3128B1F5A600957F56 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Battleship/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		89BA170328BCE8740098DE32 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		89F2EC5E28B755BA0049C5FD /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		89F2EC6028B759200049C5FD /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		89F2EC6228B79F580049C5FD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				89F2EC5E28B755BA0049C5FD /* LogInView.swift */,
 				89F2EC6028B759200049C5FD /* SignUpView.swift */,
 				89761C8028BB2A52006CFE6F /* SettingsView.swift */,
+				89BA170328BCE8740098DE32 /* AchievementsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				89490AA828B0F5F3008F5F1C /* ShipCompartment.swift in Sources */,
 				89490AB628B0F63C008F5F1C /* MenuView.swift in Sources */,
 				89490AB028B0F61B008F5F1C /* ToolbarView.swift in Sources */,
+				89BA170428BCE8740098DE32 /* AchievementsView.swift in Sources */,
 				89490ABA28B0F64D008F5F1C /* LeaderboardView.swift in Sources */,
 				8941E8AF28BB871C00683D66 /* PlaySound.swift in Sources */,
 				89490AA428B0F5D8008F5F1C /* Fleet.swift in Sources */,
